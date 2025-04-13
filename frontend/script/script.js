@@ -56,9 +56,6 @@ function populateTableWithRandomNumbers(tableID, min, max) {
             // Get the current cell
             let cell = tableRef.rows[currentRow].cells[currentCol];
 
-            // Generate a random number and add it to the cell
-            
-//-------------------------- cell.innerHTML = generateRandomNumbers(1, 9);
             cell.innerHTML = generateRandomNumbers(1, 9);
             cellCount++;
 
