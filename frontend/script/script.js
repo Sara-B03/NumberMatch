@@ -1,7 +1,5 @@
 console.log("Script loaded!");
 
-// let intialNumbers = [8, 1, 4, 7, 7, 1, 2, 6, 7, 5, 7, 8, 9, 2, 5, 7, 1, 8, 4, 6, 1, 5, 6, 9, 4, 5, 7, 5, 2, 7, 3, 2, 5, 7, 2,];
-
 let loadLocation = "0-0";
 let copiesLeft = 5;
 let moveScore = 0;
@@ -40,13 +38,13 @@ function populateTableWithRandomNumbers(tableID, min, max) {
     let tableRef = document.getElementById(tableID);
     let cellCount = 0;
 
-    // Use the global loadLocation variable (do not redeclare it)
+    // global loadLocation variable
     loadLocation = "0-0"; // Reset to the starting cell
 
     for (let row = 0; row < tableRef.rows.length; row++) {
         for (let col = 0; col < tableRef.rows[row].cells.length; col++) {
             if (cellCount >= 26) {
-                console.log("Final loadLocation after populating table:", loadLocation); // Should be "3-8"
+                console.log("Final loadLocation after populating table:", loadLocation);
                 return;
             }
 
@@ -59,15 +57,13 @@ function populateTableWithRandomNumbers(tableID, min, max) {
             cell.innerHTML = generateRandomNumbers(1, 9);
             cellCount++;
 
-            // Update the global loadLocation for the next iteration
             loadLocation = newLoadLocation;
 
-            // Debugging log to track loadLocation
             console.log(`Populated cell ${currentRow}-${currentCol}. Next loadLocation: ${loadLocation}`);
         }
     }
 
-    console.log("Final loadLocation after populating table:", loadLocation); // Should be "3-8"
+    console.log("Final loadLocation after populating table:", loadLocation);
 }
 
 // Function to initialize the game
@@ -79,14 +75,12 @@ function newGameLoading() {
     hintsList = [];
     currentHintIndex = 0;
 
-    // Clear existing table content (if any)
     const table = document.getElementById("new-table");
-    table.innerHTML = ""; // Clear the old board
+    table.innerHTML = ""; 
 
     // Recreate the table
     createTable("new-table");
 
-    // Update UI
     document.getElementById("copiesLeft").innerHTML = "Copies Left: " + copiesLeft;
     document.getElementById("score").innerHTML = moveScore;
 
@@ -105,7 +99,6 @@ function newGameLoading() {
     const card = document.getElementById("resultCard");
     card.classList.add("hidden");
 
-    // Debugging
     console.log("Game restarted — updated loadLocation:", loadLocation);
 }
 
@@ -146,7 +139,7 @@ function cellClicked(cellID) {
     else {
         secondCell = cellID;
 
-        // Run match check after slight delay for UX
+        // Run match check after slight delay
         setTimeout(() => {
             checkMatch(firstCell, secondCell);
         }, 50);
@@ -155,7 +148,6 @@ function cellClicked(cellID) {
 
 // Function to create the table
 function createTable(tableID) {
-    // Get a reference to the table
     let tableRef = document.getElementById(tableID);
 
     for (let row = 0; row < 128; row++) {
@@ -164,7 +156,7 @@ function createTable(tableID) {
         // Insert a cell in the row at index 0
         for (let col = 8; col >= 0; col--) {
             let newCell = newRow.insertCell(0);
-            // Append a text node to the cell
+
             newCell.setAttribute('id', row + "-" + col);
             newCell.setAttribute('onclick', "cellClicked(this.id)");
             let newText = document.createTextNode("");
@@ -180,7 +172,7 @@ function createTable(tableID) {
     }
 
     // Populate the table with random numbers
-    populateTableWithRandomNumbers(tableID, 1, 9); // Add this line
+    populateTableWithRandomNumbers(tableID, 1, 9);
 }
 
 // Function to check if two cells match
@@ -293,9 +285,9 @@ function checkMatch(firstCell, secondCell, hint = false) {
 
 
 
-// Function to copy the remaing numbers in the table
+// Function to copy the remaing numbers
 function remainingNumbers() {
-    let remainingNumberList = []; // List to store remaining numbers
+    let remainingNumberList = [];
 
     // Loop through all rows and cells in the table
     for (let row = 0; row < 128; row++) {
@@ -305,12 +297,12 @@ function remainingNumbers() {
 
             // Check if the cell has a number (not empty)
             if (cell.innerText !== "") {
-                remainingNumberList.push(parseInt(cell.innerText)); // Add the number to the list
+                remainingNumberList.push(parseInt(cell.innerText));
             }
         }
     }
 
-    return remainingNumberList; // Return the list of remaining numbers
+    return remainingNumberList;
 }
 
 // Function to copy remaining numbers onto the table
@@ -345,16 +337,16 @@ function copyNumbers() {
                 startCol = c;
                 break;
             } else {
-                startCol = 9; // means row is full
+                startCol = 9; 
             }
         }
 
         if (startCol === 9) {
-            startRow++; // move to next row if current one is full
+            startRow++; 
             startCol = 0;
         }
 
-        // Start copying numbers into the table from this position
+
         let row = startRow;
         let col = startCol;
 
@@ -367,12 +359,10 @@ function copyNumbers() {
             let cellID = row + "-" + col;
             let cell = document.getElementById(cellID);
 
-            // Only insert into empty cells
             if (cell.innerText === "") {
                 cell.innerText = number;
             }
 
-            // Move to next cell
             if (col === 8) {
                 col = 0;
                 row++;
@@ -411,7 +401,7 @@ function isNumbersSameColumn(cellOne, cellTwo) {
 
     // Check if the cells are in the same column
     if (cellOneCol !== cellTwoCol) {
-        return false; // Not in the same column
+        return false; 
     }
 
     // Determine the direction to check (up or down)
@@ -424,11 +414,11 @@ function isNumbersSameColumn(cellOne, cellTwo) {
         let cell = document.getElementById(cellID);
 
         if (cell.innerText !== "") {
-            return false; // Blocking number found
+            return false;
         }
     }
 
-    return true; // No blocking numbers, cells are in the same column
+    return true;
 }
 
 // Function to check if selected cells are in the same Row
@@ -443,7 +433,7 @@ function isNumbersSameRow(cellOne, cellTwo) {
 
     // Check if the cells are in the same row
     if (cellOneRow !== cellTwoRow) {
-        return false; // Not in the same row
+        return false; 
     }
 
     // Determine the direction to check (left or right)
@@ -456,11 +446,11 @@ function isNumbersSameRow(cellOne, cellTwo) {
         let cell = document.getElementById(cellID);
 
         if (cell.innerText !== "") {
-            return false; // Blocking number found
+            return false;
         }
     }
 
-    return true; // No blocking numbers, cells are in the same row
+    return true;
 }
 
 // Function to check if selected cells are Diagonally connected
@@ -475,7 +465,7 @@ function isNumbersDiagonal(cellOne, cellTwo) {
 
     // Check if the cells are diagonally aligned
     if (Math.abs(cellOneRow - cellTwoRow) !== Math.abs(cellOneCol - cellTwoCol)) {
-        return false; // Not diagonally aligned
+        return false; 
     }
 
     // Determine the direction of the diagonal
@@ -492,7 +482,7 @@ function isNumbersDiagonal(cellOne, cellTwo) {
 
         // If a cell is not empty, it's blocking the diagonal
         if (cell.innerText !== "") {
-            return false; // Blocking number found
+            return false; 
         }
 
         // Move to the next cell in the diagonal
@@ -500,9 +490,10 @@ function isNumbersDiagonal(cellOne, cellTwo) {
         currentCol += colStep;
     }
 
-    return true; // No blocking numbers, cells are diagonally aligned
+    return true;
 }
 
+// Function to check if selected cells are Adjacently connected
 function isNumbersTwoAdjacentLevels(cellOne, cellTwo, hint) {
     const cellOneLocs = cellOne.split("-");
     let cellOneRow = parseInt(cellOneLocs[0]);
@@ -511,7 +502,8 @@ function isNumbersTwoAdjacentLevels(cellOne, cellTwo, hint) {
     let cellTwoRow = parseInt(cellTwoLocs[0]);
     let cellTwoCol = parseInt(cellTwoLocs[1]);
 
-    if (Math.abs(cellOneRow - cellTwoRow) === 1) { // Check if rows are adjacent
+    // Check if rows are adjacent
+    if (Math.abs(cellOneRow - cellTwoRow) === 1) {
         let higherRow, higherCol, lowerRow, lowerCol;
         if (cellOneRow < cellTwoRow) {
             higherRow = cellOneRow;
@@ -552,22 +544,18 @@ function isNumbersTwoAdjacentLevels(cellOne, cellTwo, hint) {
 
 // Function to calculate the score and up to existing score
 function updateScore(cellOne, cellTwo) {
-    // Get the current score from the DOM
     let currentScore = parseInt(document.getElementById("score").innerText);
 
     // Calculate the distance between the two cells
     const distance = calculateDistance(cellOne, cellTwo);
 
     // Calculate the points earned based on the distance
-    const pointsEarned = distance * 10; // Example: 10 points per unit of distance
+    const pointsEarned = distance * 10; 
 
-    // Update the score
     currentScore += pointsEarned;
 
-    // Update the score in the DOM
     document.getElementById("score").innerText = currentScore;
 
-    // Reset moveScore (if needed)
     moveScore = 0;
 
     console.log("Distance between", cellOne, "and", cellTwo, "is", distance);
@@ -584,7 +572,7 @@ function calculateDistance(cellOne, cellTwo) {
     let cellTwoRow = parseInt(cellTwoLocs[0]);
     let cellTwoCol = parseInt(cellTwoLocs[1]);
 
-    // Calculate the Euclidean distance (for diagonals)
+    // Calculate the distance (for diagonals)
     const rowDiff = Math.abs(cellOneRow - cellTwoRow);
     const colDiff = Math.abs(cellOneCol - cellTwoCol);
 
@@ -599,13 +587,11 @@ function isRowCleared(row) {
         const cellID = row + "-" + col;
         const cell = document.getElementById(cellID);
 
-        // If any cell in the row is not empty, the row is not cleared
         if (cell.innerText !== "") {
             return false;
         }
     }
 
-    // If all cells in the row are empty, the row is cleared
     return true;
 }
 
@@ -626,7 +612,6 @@ function shiftRowsUp(clearedRow) {
             // Copy the number from the cell below to the current cell
             currentCell.innerText = belowCell.innerText;
 
-            // Clear the cell below
             belowCell.innerText = "";
         }
     }
@@ -638,11 +623,10 @@ function shiftRowsUp(clearedRow) {
         bottomCell.innerText = "";
     }
 
-    // After shifting, we need to check if any higher rows were cleared by the shift
     // Check all rows from the clearedRow upwards
     for (let row = clearedRow; row >= 0; row--) {
         if (isRowCleared(row)) {
-        // Check if the row BELOW is also cleared (nothing left to shift up)
+        // Check if the row BELOW is also cleared
             if (row + 1 > 127 || isRowCleared(row + 1)) {
                 console.log(`No more rows to shift from below row ${row}, stopping`);
                 break;
@@ -652,8 +636,6 @@ function shiftRowsUp(clearedRow) {
         break;
     }
 }
-
-
     // Update the loadLocation to the next available cell
     const locations = loadLocation.split("-");
     let row = parseInt(locations[0]);
@@ -670,9 +652,9 @@ function shiftRowsUp(clearedRow) {
     loadLocation = result.newLoadLocation;
 }
 
-// Function to generate all remaing possible moves as hints
+// Function to generate all remaining possible moves as hints
 function getAllHints() {
-    hintsList = []; // Clear the previous hints list
+    hintsList = [];
     console.log("Cleared the hints now the size is: " + hintsList.length);
 
     const cellLocs = loadLocation.split("-");
@@ -685,7 +667,6 @@ function getAllHints() {
             const currentLocation = row + "-" + col;
             const currentCell = document.getElementById(currentLocation);
 
-            // Skip empty cells
             if (currentCell.innerText === "") continue;
 
             // Check for matches in the same row, column, or diagonal
@@ -694,7 +675,6 @@ function getAllHints() {
                     const secondLocation = secondRow + "-" + secondCol;
                     const secondCell = document.getElementById(secondLocation);
 
-                    // Skip empty cells and self-comparison
                     if (secondCell.innerText === "" || currentLocation === secondLocation) continue;
 
                     // Check if the cells match
@@ -743,6 +723,7 @@ function showHints() {
     currentHintIndex = (currentHintIndex + 1) % hintsList.length;
 }
 
+// Function to show the results to player (win/loss)
 function showResultCard(title, message, celebrate = false) {
     const card = document.getElementById("resultCard");
     const titleEl = document.getElementById("resultTitle");
@@ -767,8 +748,9 @@ function showResultCard(title, message, celebrate = false) {
     }, 100); 
 }
 
+// Function to check if the player wins or losses
 function checkGameStatus() {
-    const remaining = remainingNumbers(); // Your custom function
+    const remaining = remainingNumbers();
 
     console.log("Remaining Numbers:", remaining);
     console.log("Remaining Count:", remaining.length);
@@ -788,23 +770,18 @@ function checkGameStatus() {
     return "playing";
 }
 
-
-
-
-
+// Function to hide and show the settings 
 function toggleSettings() {
     document.getElementById("settingsMenu").classList.toggle("show");
   }
 
-// Toggle the visibility of the leaderboard menu (used by leaderboard button)
+// Function to hide and show the leaderboard
 function toggleLeaderboard() {
-    // Hide the settings menu if it's open when clicking on the leaderboard button
     const settingsMenu = document.getElementById("settingsMenu");
     if (settingsMenu.classList.contains("show")) {
         settingsMenu.classList.remove("show");
     }
 
-    // Show or hide the leaderboard menu
     document.getElementById("leaderboardMenu").classList.toggle("show");
     
     // Fetch and display the leaderboard when opened
@@ -814,30 +791,27 @@ function toggleLeaderboard() {
 // Function to fetch leaderboard data and update the table
 async function fetchLeaderboard() {
     try {
-        const response = await fetch('https://your-backend-api/leaderboard'); // Your actual endpoint here
+        const response = await fetch('https://your-backend-api/leaderboard');
         const leaderboardData = await response.json();
         
         // Select the table body to update
         const leaderboardTableBody = document.querySelector("#leaderboardTable tbody");
-        leaderboardTableBody.innerHTML = ''; // Clear current table
+        leaderboardTableBody.innerHTML = '';
 
         // Populate leaderboard table with new data
         leaderboardData.forEach((entry, index) => {
             const row = document.createElement('tr');
             
-            // Rank
             const rankCell = document.createElement('td');
             rankCell.textContent = index + 1;
             row.appendChild(rankCell);
 
-            // Name
             const nameCell = document.createElement('td');
-            nameCell.textContent = entry.name; // Assuming 'name' is part of the response
+            nameCell.textContent = entry.name; 
             row.appendChild(nameCell);
 
-            // Score
             const scoreCell = document.createElement('td');
-            scoreCell.textContent = entry.score; // Assuming 'score' is part of the response
+            scoreCell.textContent = entry.score; 
             row.appendChild(scoreCell);
 
             leaderboardTableBody.appendChild(row);
@@ -847,28 +821,24 @@ async function fetchLeaderboard() {
     }
 }
 
-  function handleDifficultyChange(level) {
+// Function to handle difficulty 
+function handleDifficultyChange(level) {
     localStorage.setItem("difficulty", level);
     console.log("Difficulty set to:", level);
   }
 
-  function handleSoundToggle(isOn) {
+// Function to handle the sound  
+function handleSoundToggle(isOn) {
     localStorage.setItem("sound", isOn);
     console.log("Sound is", isOn ? "on" : "off");
   }
 
-  function toggleTheme(isDark) {
+// Function to handle the theme of the game  
+function toggleTheme(isDark) {
     document.body.classList.toggle("dark-mode", isDark);
     localStorage.setItem("theme", isDark ? "dark" : "light");
   }
 
-  function startGame() {
-    window.location.href = "game.html";
-}
-
-function goHome() {
-    window.location.href = "index.html";
-  }
 
 
   // Load saved settings on page load
