@@ -1,62 +1,57 @@
 const express = require('express');
-const mysql = require('mysql');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const { Pool } = require('pg');
+require('dotenv').config(); // To use environment variables from .env file
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 // Middleware
-app.use(cors()); // allow cross-origin requests
+app.use(cors());
 app.use(bodyParser.json());
 
-// MySQL connection
-const db = mysql.createConnection({
-    host: process.env.DB_HOST,
-    port: process.env.DB_PORT || 3306,  // Default MySQL port
+// PostgreSQL connection
+const pool = new Pool({
     user: process.env.DB_USER,
+    host: process.env.DB_HOST,
+    database: process.env.DB_NAME,
     password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME
-});
-
-
-db.connect((err) => {
-    if (err) {
-        console.error('❌ Error connecting to MySQL:', err);
-        return;
-    }
-    console.log('✅ Connected to MySQL!');
+    port: process.env.DB_PORT || 5432,
+    ssl: { rejectUnauthorized: false } // Required for Render
 });
 
 // 📥 Route to submit score
-app.post('/submit', (req, res) => {
-  const { name, score } = req.body;
+app.post('/submit', async (req, res) => {
+    const { name, score, time } = req.body;
 
-  if (!name || score == null) {
-      return res.status(400).json({ error: 'Missing player name or score' });
-  }
+    if (!name || score == null || !time) {
+        return res.status(400).json({ error: 'Missing name, score, or time' });
+    }
 
-  const sql = 'INSERT INTO scores (name, score) VALUES (?, ?)';
-  db.query(sql, [name, score], (err, result) => {
-      if (err) {
-          console.error('❌ MySQL Insert Error:', err); // Log the actual error
-          return res.status(500).json({ error: 'Database error' });
-      }
-      res.json({ success: true, id: result.insertId });
-  });
+    try {
+        const result = await pool.query(
+            'INSERT INTO leaderboard (name, score, time) VALUES ($1, $2, $3) RETURNING id',
+            [name, score, time]
+        );
+        res.json({ success: true, id: result.rows[0].id });
+    } catch (err) {
+        console.error('❌ PostgreSQL Insert Error:', err);
+        res.status(500).json({ error: 'Database error' });
+    }
 });
 
-
 // 📊 Route to get top scores
-app.get('/leaderboard', (req, res) => {
-    const sql = 'SELECT name, score FROM scores ORDER BY score DESC LIMIT 10';
-    db.query(sql, (err, results) => {
-        if (err) {
-            console.error('Error retrieving leaderboard:', err);
-            return res.status(500).json({ error: 'Database error' });
-        }
-        res.json(results);
-    });
+app.get('/leaderboard', async (req, res) => {
+    try {
+        const result = await pool.query(
+            'SELECT name, score, time, date FROM leaderboard ORDER BY score DESC LIMIT 10'
+        );
+        res.json(result.rows);
+    } catch (err) {
+        console.error('❌ PostgreSQL Fetch Error:', err);
+        res.status(500).json({ error: 'Database error' });
+    }
 });
 
 // Start server
