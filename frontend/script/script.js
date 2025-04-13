@@ -796,6 +796,57 @@ function toggleSettings() {
     document.getElementById("settingsMenu").classList.toggle("show");
   }
 
+// Toggle the visibility of the leaderboard menu (used by leaderboard button)
+function toggleLeaderboard() {
+    // Hide the settings menu if it's open when clicking on the leaderboard button
+    const settingsMenu = document.getElementById("settingsMenu");
+    if (settingsMenu.classList.contains("show")) {
+        settingsMenu.classList.remove("show");
+    }
+
+    // Show or hide the leaderboard menu
+    document.getElementById("leaderboardMenu").classList.toggle("show");
+    
+    // Fetch and display the leaderboard when opened
+    fetchLeaderboard();
+}
+
+// Function to fetch leaderboard data and update the table
+async function fetchLeaderboard() {
+    try {
+        const response = await fetch('https://your-backend-api/leaderboard'); // Your actual endpoint here
+        const leaderboardData = await response.json();
+        
+        // Select the table body to update
+        const leaderboardTableBody = document.querySelector("#leaderboardTable tbody");
+        leaderboardTableBody.innerHTML = ''; // Clear current table
+
+        // Populate leaderboard table with new data
+        leaderboardData.forEach((entry, index) => {
+            const row = document.createElement('tr');
+            
+            // Rank
+            const rankCell = document.createElement('td');
+            rankCell.textContent = index + 1;
+            row.appendChild(rankCell);
+
+            // Name
+            const nameCell = document.createElement('td');
+            nameCell.textContent = entry.name; // Assuming 'name' is part of the response
+            row.appendChild(nameCell);
+
+            // Score
+            const scoreCell = document.createElement('td');
+            scoreCell.textContent = entry.score; // Assuming 'score' is part of the response
+            row.appendChild(scoreCell);
+
+            leaderboardTableBody.appendChild(row);
+        });
+    } catch (error) {
+        console.error('Error fetching leaderboard:', error);
+    }
+}
+
   function handleDifficultyChange(level) {
     localStorage.setItem("difficulty", level);
     console.log("Difficulty set to:", level);

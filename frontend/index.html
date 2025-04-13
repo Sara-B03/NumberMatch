@@ -12,12 +12,29 @@
     <div class="top-bar">
         <h1>🎯 Number Match</h1>
         <button class="settings-btn" onclick="toggleSettings()">⚙️ Settings</button>
+        <button class="leaderboard-btn" onclick="toggleLeaderboard()">🎯 Leader Board</button>
       </div>
       <div class="settings-container" id="settingsMenu">
         <div class="card">
           <h3>Difficulty</h3>
           <p id="difficultyLabel">Loading...</p>
         </div>
+        <div class="leaderboard-container hidden" id="leaderboardMenu">
+          <h3>Leaderboard</h3>
+          <table id="leaderboardTable">
+              <thead>
+                  <tr>
+                      <th>Rank</th>
+                      <th>Name</th>
+                      <th>Score</th>
+                  </tr>
+              </thead>
+              <tbody>
+
+              </tbody>
+          </table>
+      </div>
+
         <div class="card">
           <h3>Sound</h3>
           <label class="toggle-label">

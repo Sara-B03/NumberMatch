@@ -344,3 +344,13 @@ button {
     pointer-events: none;
     z-index: 999;
 }
+
+/* Hide the leaderboard and settings by default */
+.hidden {
+  display: none;
+}
+
+/* Show the menu when the class "show" is added */
+.show {
+  display: block;
+}
