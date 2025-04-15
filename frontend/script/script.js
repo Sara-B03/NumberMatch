@@ -106,6 +106,67 @@ function newGameLoading() {
     console.log("Game restarted — updated loadLocation:", loadLocation);
 }
 
+// Function to fetch leaderboard data and update the table
+async function fetchLeaderboard() {
+    try {
+        const response = await fetch('https://leaderboard-backend-8kfd.onrender.com/leaderboard');
+        const leaderboardData = await response.json();
+
+        const leaderboardTableBody = document.querySelector("#leaderboardTable tbody");
+        leaderboardTableBody.innerHTML = '';
+
+        leaderboardData.forEach((entry, index) => {
+            const row = document.createElement('tr');
+
+            const rankCell = document.createElement('td');
+            rankCell.textContent = index + 1;
+            row.appendChild(rankCell);
+
+            const nameCell = document.createElement('td');
+            nameCell.textContent = entry.name;
+            row.appendChild(nameCell);
+
+            const scoreCell = document.createElement('td');
+            scoreCell.textContent = entry.score;
+            row.appendChild(scoreCell);
+
+            leaderboardTableBody.appendChild(row);
+        });
+    } catch (error) {
+        console.error('Error fetching leaderboard:', error);
+    }
+}
+
+async function submitScore() {
+    const name = document.getElementById("playerNameInput").value.trim();
+    const score = parseInt(document.getElementById("score").innerText);
+
+    if (!name) {
+        alert("Please enter your name to submit your score.");
+        return;
+    }
+
+    try {
+        const response = await fetch('https://leaderboard-backend-8kfd.onrender.com/submit', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ name, score })
+        });
+
+        if (response.ok) {
+            alert("Score submitted successfully! 🎉");
+            newGameLoading();
+        } else {
+            alert("Failed to submit score. Please try again later.");
+        }
+    } catch (error) {
+        console.error("Submit error:", error);
+        alert("Something went wrong. Please try again later.");
+    }
+}
+
 // Call the function to start the game
 newGameLoading();
 
@@ -807,6 +868,7 @@ function showResultCard(title, message, celebrate = false) {
 
     if (celebrate) {
         setTimeout(() => {
+            const canvas = document.getElementById("confettiCanvas");
             const myConfetti = confetti.create(canvas, {
                 resize: true,
                 useWorker: true
@@ -820,7 +882,6 @@ function showResultCard(title, message, celebrate = false) {
         }, 100);
     }
 }
-
 
 // Function to check if the player wins or losses
 function checkGameStatus() {
@@ -860,39 +921,6 @@ function toggleLeaderboard() {
     
     // Fetch and display the leaderboard when opened
     fetchLeaderboard();
-}
-
-// Function to fetch leaderboard data and update the table
-async function fetchLeaderboard() {
-    try {
-        const response = await fetch('https://your-backend-api/leaderboard');
-        const leaderboardData = await response.json();
-        
-        // Select the table body to update
-        const leaderboardTableBody = document.querySelector("#leaderboardTable tbody");
-        leaderboardTableBody.innerHTML = '';
-
-        // Populate leaderboard table with new data
-        leaderboardData.forEach((entry, index) => {
-            const row = document.createElement('tr');
-            
-            const rankCell = document.createElement('td');
-            rankCell.textContent = index + 1;
-            row.appendChild(rankCell);
-
-            const nameCell = document.createElement('td');
-            nameCell.textContent = entry.name; 
-            row.appendChild(nameCell);
-
-            const scoreCell = document.createElement('td');
-            scoreCell.textContent = entry.score; 
-            row.appendChild(scoreCell);
-
-            leaderboardTableBody.appendChild(row);
-        });
-    } catch (error) {
-        console.error('Error fetching leaderboard:', error);
-    }
 }
 
 // Function to handle difficulty 
