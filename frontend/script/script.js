@@ -796,25 +796,32 @@ function showResultCard(title, message, celebrate = false) {
     const card = document.getElementById("resultCard");
     const titleEl = document.getElementById("resultTitle");
     const messageEl = document.getElementById("resultMessage");
+    const scoreEl = document.getElementById("finalScoreDisplay");
+
+    const currentScore = parseInt(document.getElementById("score").innerText);
+    scoreEl.innerText = `Your Final Score: ${currentScore}`;
 
     titleEl.innerText = title;
     messageEl.innerText = message;
 
     card.classList.remove("hidden");
 
-    setTimeout(() => {
-        const myConfetti = confetti.create(canvas, {
-            resize: true,
-            useWorker: true
-        });
+    if (celebrate) {
+        setTimeout(() => {
+            const myConfetti = confetti.create(canvas, {
+                resize: true,
+                useWorker: true
+            });
 
-        myConfetti({
-            particleCount: 200,
-            spread: 100,
-            origin: { y: 0.6 }
-        });
-    }, 100); 
+            myConfetti({
+                particleCount: 200,
+                spread: 100,
+                origin: { y: 0.6 }
+            });
+        }, 100);
+    }
 }
+
 
 // Function to check if the player wins or losses
 function checkGameStatus() {

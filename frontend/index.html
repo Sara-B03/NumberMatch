@@ -68,11 +68,21 @@
         <table id="new-table">
         </table>
         <div id="resultCard" class="result-card hidden">
-            <div class="card-content">
+          <div class="card-content">
               <h2 id="resultTitle"></h2>
               <p id="resultMessage"></p>
+              <p id="finalScoreDisplay"></p>
+      
+              <div id="scoreSubmission">
+                  <input type="text" id="playerNameInput" placeholder="Enter your name" />
+                  <button onclick="submitScore()">Submit Score</button>
+                  <button onclick="newGameLoading()">Skip</button>
+              </div>
+      
               <button onclick="newGameLoading()">Play Again</button>
-            </div>
+          </div>
+          <canvas id="confettiCanvas"></canvas>
+      </div>
             <canvas id="confettiCanvas"></canvas>
           </div>
           <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
