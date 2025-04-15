@@ -58,9 +58,12 @@
                 <span class="material-symbols-outlined">content_copy</span>
             </button>
         </div>
-        <button id="hint">
-            <span class="material-symbols-outlined" onclick="showHints()">lightbulb</span>
-        </button>
+        <div id="hint-container" style="display: flex; align-items: center; gap: 8px;">
+          <button id="hint" onclick="showHints()">
+              <span class="material-symbols-outlined">lightbulb</span>
+          </button>
+          <span id="hintsLeft">Hints Left: 5</span>
+      </div>
 
         <table id="new-table">
         </table>

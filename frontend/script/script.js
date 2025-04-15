@@ -5,7 +5,10 @@ let copiesLeft = 5;
 let moveScore = 0;
 let intialNumbers = [];
 let hintsList = [];
+let hintsUsed = 0;
+const maxHints = 5;
 let currentHintIndex = 0;
+let currentHint = null; 
 
 // Function (Reusable) for loadLocation logic
 function parseAndUpdateLoadLocation() {
@@ -26,7 +29,6 @@ function parseAndUpdateLoadLocation() {
     const newLoadLocation = row + "-" + col;
     return { currentRow, currentCol, newLoadLocation };
 }
-
 
 // Function to generate random numbers
 function generateRandomNumbers(min, max) {
@@ -74,6 +76,7 @@ function newGameLoading() {
     moveScore = 0;
     hintsList = [];
     currentHintIndex = 0;
+    hintsUsed = 0;
 
     const table = document.getElementById("new-table");
     table.innerHTML = ""; 
@@ -83,6 +86,7 @@ function newGameLoading() {
 
     document.getElementById("copiesLeft").innerHTML = "Copies Left: " + copiesLeft;
     document.getElementById("score").innerHTML = moveScore;
+    document.getElementById("hintsLeft").innerText = `Hints Left: ${maxHints}`;
 
     // Populate the table with initial numbers
     for (let i = 0; i < intialNumbers.length; i++) {
@@ -101,7 +105,6 @@ function newGameLoading() {
 
     console.log("Game restarted — updated loadLocation:", loadLocation);
 }
-
 
 // Call the function to start the game
 newGameLoading();
@@ -181,15 +184,16 @@ function checkMatch(firstCell, secondCell, hint = false) {
     const cellTwo = document.getElementById(secondCell);
 
     // Apply selected styling
-    cellOne.classList.add("selected");
-    cellTwo.classList.add("selected");
+    if (!hint) {
+        cellOne.classList.add("selected");
+        cellTwo.classList.add("selected");
+    }
 
-//To check if the path clear 
     const isPathClear =
-    isNumbersSameColumn(firstCell, secondCell) ||
-    isNumbersSameRow(firstCell, secondCell) ||
-    isNumbersDiagonal(firstCell, secondCell) ||
-    isNumbersTwoAdjacentLevels(firstCell, secondCell);
+        isNumbersSameColumn(firstCell, secondCell) ||
+        isNumbersSameRow(firstCell, secondCell) ||
+        isNumbersDiagonal(firstCell, secondCell) ||
+        isNumbersTwoAdjacentLevels(firstCell, secondCell);
 
     if (!isPathClear) {
         if (!hint) {
@@ -200,75 +204,105 @@ function checkMatch(firstCell, secondCell, hint = false) {
                 cellTwo.classList.remove("match-fail", "selected");
             }, 500);
         }
+
+        // Always clear yellow highlight
+        cellOne.style.backgroundColor = "white";
+        cellTwo.style.backgroundColor = "white";
+
         return false;
     }
 
-    {
-        let cellOneNumber = parseInt(cellOne.innerText);
-        let cellTwoNumber = parseInt(cellTwo.innerText);
+    let cellOneNumber = parseInt(cellOne.innerText);
+    let cellTwoNumber = parseInt(cellTwo.innerText);
 
-        if (cellOneNumber === cellTwoNumber) {
-            if (!hint) {
-                console.log("Match found! Numbers are the same.");
+    if (cellOneNumber === cellTwoNumber) {
+        if (!hint) {
+            console.log("Match found! Numbers are the same.");
 
-                // Add success styling
-                cellOne.classList.add("match-success");
-                cellTwo.classList.add("match-success");
+            cellOne.classList.add("match-success");
+            cellTwo.classList.add("match-success");
 
-                setTimeout(() => {
-                    cellOne.innerText = "";
-                    cellTwo.innerText = "";
+            setTimeout(() => {
+                cellOne.innerText = "";
+                cellTwo.innerText = "";
 
-                    updateScore(firstCell, secondCell);
+                updateScore(firstCell, secondCell);
 
-                    const firstCellRow = parseInt(firstCell.split("-")[0]);
-                    const secondCellRow = parseInt(secondCell.split("-")[0]);
+                const firstCellRow = parseInt(firstCell.split("-")[0]);
+                const secondCellRow = parseInt(secondCell.split("-")[0]);
 
-                    if (isRowCleared(firstCellRow)) shiftRowsUp(firstCellRow);
-                    if (firstCellRow !== secondCellRow && isRowCleared(secondCellRow)) shiftRowsUp(secondCellRow);
+                if (isRowCleared(firstCellRow)) shiftRowsUp(firstCellRow);
+                if (firstCellRow !== secondCellRow && isRowCleared(secondCellRow)) shiftRowsUp(secondCellRow);
 
-                    parseAndUpdateLoadLocation();
+                parseAndUpdateLoadLocation();
 
-                    cellOne.classList.remove("match-success", "selected");
-                    cellTwo.classList.remove("match-success", "selected");
+                // Check if matched cells match the current hint
+                if (currentHint && (
+                    (firstCell === currentHint[0] && secondCell === currentHint[1]) ||
+                    (firstCell === currentHint[1] && secondCell === currentHint[0])
+                )) {
+                    hintsUsed++;
+                    document.getElementById("hintsLeft").innerText = `Hints Left: ${maxHints - hintsUsed}`;
+                    currentHint = null;
+                }
 
-                    checkGameStatus();
-                }, 500);
-            }
-            return true;
-        } else if (cellOneNumber + cellTwoNumber === 10) {
-            console.log("Match found! Numbers add up to 10.");
+                cellOne.classList.remove("match-success", "selected");
+                cellTwo.classList.remove("match-success", "selected");
 
-            if (!hint) {
-                // Add success styling
-                cellOne.classList.add("match-success");
-                cellTwo.classList.add("match-success");
+                // Clear yellow highlight after success
+                cellOne.style.backgroundColor = "white";
+                cellTwo.style.backgroundColor = "white";
 
-                setTimeout(() => {
-                    cellOne.innerText = "";
-                    cellTwo.innerText = "";
+                checkGameStatus();
+            }, 500);
+        }
+        return true;
+    } else if (cellOneNumber + cellTwoNumber === 10) {
+        console.log("Match found! Numbers add up to 10.");
 
-                    updateScore(firstCell, secondCell);
+        if (!hint) {
+            cellOne.classList.add("match-success");
+            cellTwo.classList.add("match-success");
 
-                    const firstCellRow = parseInt(firstCell.split("-")[0]);
-                    const secondCellRow = parseInt(secondCell.split("-")[0]);
+            setTimeout(() => {
+                cellOne.innerText = "";
+                cellTwo.innerText = "";
 
-                    if (isRowCleared(firstCellRow)) shiftRowsUp(firstCellRow);
-                    if (firstCellRow !== secondCellRow && isRowCleared(secondCellRow)) shiftRowsUp(secondCellRow);
+                updateScore(firstCell, secondCell);
 
-                    parseAndUpdateLoadLocation();
+                const firstCellRow = parseInt(firstCell.split("-")[0]);
+                const secondCellRow = parseInt(secondCell.split("-")[0]);
 
-                    cellOne.classList.remove("match-success", "selected");
-                    cellTwo.classList.remove("match-success", "selected");
+                if (isRowCleared(firstCellRow)) shiftRowsUp(firstCellRow);
+                if (firstCellRow !== secondCellRow && isRowCleared(secondCellRow)) shiftRowsUp(secondCellRow);
 
-                    checkGameStatus();
-                }, 500);
-            }
-            return true;
-        } else {
-            console.log("No match. Numbers do not add up to 10 or are not the same.");
+                parseAndUpdateLoadLocation();
 
-            // Add fail styling and reset
+                // Check if matched cells match the current hint
+                if (currentHint && (
+                    (firstCell === currentHint[0] && secondCell === currentHint[1]) ||
+                    (firstCell === currentHint[1] && secondCell === currentHint[0])
+                )) {
+                    hintsUsed++;
+                    document.getElementById("hintsLeft").innerText = `Hints Left: ${maxHints - hintsUsed}`;
+                    currentHint = null;
+                }
+
+                cellOne.classList.remove("match-success", "selected");
+                cellTwo.classList.remove("match-success", "selected");
+
+                // Clear yellow highlight after success
+                cellOne.style.backgroundColor = "white";
+                cellTwo.style.backgroundColor = "white";
+
+                checkGameStatus();
+            }, 500);
+        }
+        return true;
+    } else {
+        console.log("No match. Numbers do not add up to 10 or are not the same.");
+
+        if (!hint) {
             cellOne.classList.add("match-fail");
             cellTwo.classList.add("match-fail");
 
@@ -276,14 +310,15 @@ function checkMatch(firstCell, secondCell, hint = false) {
                 cellOne.classList.remove("match-fail", "selected");
                 cellTwo.classList.remove("match-fail", "selected");
             }, 500);
-
-            return false;
         }
+
+        // Always clear yellow highlight on no match
+        cellOne.style.backgroundColor = "white";
+        cellTwo.style.backgroundColor = "white";
+
+        return false;
     }
-    return false;
 }
-
-
 
 // Function to copy the remaing numbers
 function remainingNumbers() {
@@ -546,21 +581,30 @@ function isNumbersTwoAdjacentLevels(cellOne, cellTwo, hint) {
 function updateScore(cellOne, cellTwo) {
     let currentScore = parseInt(document.getElementById("score").innerText);
 
-    // Calculate the distance between the two cells
+    let basePoints = 0;
+
+    if (isNumbersSameColumn(cellOne, cellTwo) || isNumbersSameRow(cellOne, cellTwo)) {
+        basePoints = 10;
+    } else if (isNumbersDiagonal(cellOne, cellTwo)) {
+        basePoints = 20;
+    } else if (isNumbersTwoAdjacentLevels(cellOne, cellTwo)) {
+        basePoints = 30;
+    }
+
     const distance = calculateDistance(cellOne, cellTwo);
 
-    // Calculate the points earned based on the distance
-    const pointsEarned = distance * 10; 
+    const pointsEarned = basePoints * distance;
 
     currentScore += pointsEarned;
 
     document.getElementById("score").innerText = currentScore;
 
-    moveScore = 0;
+    console.log(`Match type score: ${basePoints}, distance: ${distance}`);
+    console.log(`Total points earned: ${pointsEarned}`);
 
-    console.log("Distance between", cellOne, "and", cellTwo, "is", distance);
-    console.log("Points earned:", pointsEarned);
+    moveScore = 0;
 }
+
 
 // Function to calculate the distance between two cells for updateScore function
 function calculateDistance(cellOne, cellTwo) {
@@ -693,35 +737,59 @@ function getAllHints() {
 
 // Function to display hints to player
 function showHints() {
-    hintsList = getAllHints();
-
-    if (hintsList.length === 0) {
-        if (copiesLeft === 0) {
-            window.alert("Sorry, no more moves left. You lost. Please try again.");
-            newGameLoading();
-        } else {
-            window.alert("No more plays available!");
-        }
+    if (hintsUsed >= maxHints) {
+        window.alert("You've used all your hints for this game!");
         return;
     }
 
-    // Clear previous hint highlights
-    for (let i = 0; i < hintsList.length; i++) {
-        const hint = hintsList[i];
-        const [cellOne, cellTwo] = hint.split("WITH");
-        document.getElementById(cellOne).style.backgroundColor = "white";
-        document.getElementById(cellTwo).style.backgroundColor = "white";
+    // Clear previous highlights
+    for (let row = 0; row < 128; row++) {
+        for (let col = 0; col < 9; col++) {
+            const cell = document.getElementById(`${row}-${col}`);
+            cell.style.backgroundColor = "white";
+            cell.classList.remove("selected");
+        }
     }
 
-    // Highlight the current hint
-    const currentHint = hintsList[currentHintIndex];
-    const [cellOne, cellTwo] = currentHint.split("WITH");
-    document.getElementById(cellOne).style.backgroundColor = "yellow";
-    document.getElementById(cellTwo).style.backgroundColor = "yellow";
+    const cellLocs = loadLocation.split("-");
+    let loadLocationRow = parseInt(cellLocs[0]);
 
-    // Move to the next hint (cycle back to the start if needed)
-    currentHintIndex = (currentHintIndex + 1) % hintsList.length;
+    for (let row = 0; row <= loadLocationRow; row++) {
+        for (let col = 0; col < 9; col++) {
+            const cellID1 = `${row}-${col}`;
+            const cell1 = document.getElementById(cellID1);
+
+            if (cell1.innerText === "") continue;
+
+            for (let r2 = row; r2 <= loadLocationRow; r2++) {
+                for (let c2 = (r2 === row ? col + 1 : 0); c2 < 9; c2++) {
+                    const cellID2 = `${r2}-${c2}`;
+                    const cell2 = document.getElementById(cellID2);
+
+                    if (cellID1 === cellID2 || cell2.innerText === "") continue;
+
+                    if (checkMatch(cellID1, cellID2, true)) {
+                        // Highlight the hint cells
+                        cell1.style.backgroundColor = "yellow";
+                        cell2.style.backgroundColor = "yellow";
+
+                        // Store the current hint for later tracking
+                        currentHint = [cellID1, cellID2];
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
+    if (copiesLeft === 0) {
+        window.alert("Sorry, no more moves left. You lost. Please try again.");
+        newGameLoading();
+    } else {
+        window.alert("No possible plays available!");
+    }
 }
+
 
 // Function to show the results to player (win/loss)
 function showResultCard(title, message, celebrate = false) {
@@ -773,7 +841,7 @@ function checkGameStatus() {
 // Function to hide and show the settings 
 function toggleSettings() {
     document.getElementById("settingsMenu").classList.toggle("show");
-  }
+}
 
 // Function to hide and show the leaderboard
 function toggleLeaderboard() {
@@ -825,24 +893,22 @@ async function fetchLeaderboard() {
 function handleDifficultyChange(level) {
     localStorage.setItem("difficulty", level);
     console.log("Difficulty set to:", level);
-  }
+}
 
 // Function to handle the sound  
 function handleSoundToggle(isOn) {
     localStorage.setItem("sound", isOn);
     console.log("Sound is", isOn ? "on" : "off");
-  }
+}
 
 // Function to handle the theme of the game  
 function toggleTheme(isDark) {
     document.body.classList.toggle("dark-mode", isDark);
     localStorage.setItem("theme", isDark ? "dark" : "light");
-  }
+}
 
-
-
-  // Load saved settings on page load
-  window.onload = () => {
+// Load saved settings on page load
+window.onload = () => {
     const difficulty = localStorage.getItem("difficulty");
     const sound = localStorage.getItem("sound") === "true";
     const theme = localStorage.getItem("theme");
@@ -851,7 +917,7 @@ function toggleTheme(isDark) {
     document.getElementById("soundToggle").checked = sound;
     document.getElementById("themeToggle").checked = (theme === "dark");
     if (theme === "dark") document.body.classList.add("dark-mode");
-  };
+};
 
 
 
