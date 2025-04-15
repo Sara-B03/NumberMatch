@@ -365,21 +365,20 @@ function copyNumbers() {
         // Set starting point for copy after the last number in that row
         let startRow = lastFilledRow;
         let startCol = 0;
-
-        for (let c = 0; c < 9; c++) {
+        
+        for (let c = 8; c >= 0; c--) {
             let cell = document.getElementById(startRow + "-" + c);
-            if (cell.innerText === "") {
-                startCol = c;
+            if (cell.innerText !== "") {
+                startCol = c + 1;
                 break;
-            } else {
-                startCol = 9; 
             }
         }
-
-        if (startCol === 9) {
-            startRow++; 
+        
+        if (startCol >= 9) {
+            startRow++;
             startCol = 0;
         }
+        
 
 
         let row = startRow;
