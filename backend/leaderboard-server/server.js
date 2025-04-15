@@ -23,16 +23,16 @@ const pool = new Pool({
 
 // 📥 Route to submit score
 app.post('/submit', async (req, res) => {
-    const { name, score, time } = req.body;
+    const { name, score } = req.body;
 
-    if (!name || score == null || !time) {
-        return res.status(400).json({ error: 'Missing name, score, or time' });
+    if (!name || score == null) {
+        return res.status(400).json({ error: 'Missing name or score' });
     }
 
     try {
         const result = await pool.query(
-            'INSERT INTO leaderboard (name, score, time) VALUES ($1, $2, $3) RETURNING id',
-            [name, score, time]
+            'INSERT INTO leaderboard (name, score) VALUES ($1, $2) RETURNING id',
+            [name, score]
         );
         res.json({ success: true, id: result.rows[0].id });
     } catch (err) {
@@ -45,7 +45,7 @@ app.post('/submit', async (req, res) => {
 app.get('/leaderboard', async (req, res) => {
     try {
         const result = await pool.query(
-            'SELECT name, score, time, date FROM leaderboard ORDER BY score DESC LIMIT 10'
+            'SELECT name, score FROM leaderboard ORDER BY score DESC LIMIT 10'
         );
         res.json(result.rows);
     } catch (err) {
