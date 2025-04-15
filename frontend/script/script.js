@@ -56,7 +56,7 @@ function populateTableWithRandomNumbers(tableID, min, max) {
             // Get the current cell
             let cell = tableRef.rows[currentRow].cells[currentCol];
 
-            cell.innerHTML = generateRandomNumbers(1, 9);
+            cell.innerHTML = 1;
             cellCount++;
 
             loadLocation = newLoadLocation;
@@ -439,8 +439,6 @@ function copyNumbers() {
             startRow++;
             startCol = 0;
         }
-        
-
 
         let row = startRow;
         let col = startCol;

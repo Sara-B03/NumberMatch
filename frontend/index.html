@@ -10,82 +10,104 @@
 </head>
 
 <body onload="newGameLoading()">
+  <div class="container">
 
-  <div class="top-bar">
+    <!-- Page Title -->
     <h1>🎯 Number Match</h1>
-    <button class="settings-btn" onclick="toggleSettings()">⚙️ Settings</button>
-    <button class="leaderboard-btn" onclick="toggleLeaderboard()">🎯 Leader Board</button>
-  </div>
 
-  <div class="settings-container" id="settingsMenu">
-    <div class="card">
-      <h3>Difficulty</h3>
-      <p id="difficultyLabel">Loading...</p>
+    <!-- Top Bar Buttons -->
+    <div class="top-bar">
+      <button class="settings-btn" onclick="toggleSettings()">⚙️ Settings</button>
+      <button class="leaderboard-btn" onclick="toggleLeaderboard()">🏆 Leader Board</button>
     </div>
-    <div class="leaderboard-container" id="leaderboardMenu">
-      <h3>Leaderboard</h3>
-      <table id="leaderboardTable">
-        <thead>
-          <tr>
-            <th>Rank</th>
-            <th>Name</th>
-            <th>Score</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </div>
-    <div class="card">
-      <h3>Sound</h3>
-      <label class="toggle-label">
-        <input type="checkbox" id="soundToggle" onchange="handleSoundToggle(this.checked)" />
-        Enable Sound
-      </label>
-    </div>
-    <div class="card">
-      <h3>Theme</h3>
-      <label class="toggle-label">
-        <input type="checkbox" id="themeToggle" onchange="toggleTheme(this.checked)" />
-        Dark Mode
-      </label>
-    </div>
-  </div>
 
-  <div id="game-info">
-    <button id="score">Score: 0</button>
-    <button id="copiesLeft" onclick="copyNumbers()">Copies Left: 5
-      <span class="material-symbols-outlined">content_copy</span>
-    </button>
-  </div>
-
-  <div id="hint-container" style="display: flex; align-items: center; gap: 8px;">
-    <button id="hint" onclick="showHints()">
-      <span class="material-symbols-outlined">lightbulb</span>
-    </button>
-    <span id="hintsLeft">Hints Left: 5</span>
-  </div>
-
-  <table id="new-table"></table>
-
-  <div id="resultCard" class="result-card hidden">
-    <div class="card-content">
-      <h2 id="resultTitle"></h2>
-      <p id="resultMessage"></p>
-      <p id="finalScoreDisplay"></p>
-
-      <div id="scoreSubmission">
-        <input type="text" id="playerNameInput" placeholder="Enter your name" />
-        <button onclick="submitScore()">Submit Score</button>
-        <button onclick="newGameLoading()">Skip</button>
+    <!-- Settings Panel -->
+    <div class="settings-container" id="settingsMenu">
+      <button class="close-btn" onclick="toggleSettings()">✖</button>
+      <div class="card">
+        <h3>Difficulty</h3>
+        <p id="difficultyLabel">Loading...</p>
       </div>
-
-      <button onclick="newGameLoading()">Play Again</button>
+      <div class="card">
+        <h3>Sound</h3>
+        <label class="toggle-label">
+          <input type="checkbox" id="soundToggle" onchange="handleSoundToggle(this.checked)" />
+          Enable Sound
+        </label>
+      </div>
+      <div class="card">
+        <h3>Theme</h3>
+        <label class="toggle-label">
+          <input type="checkbox" id="themeToggle" onchange="toggleTheme(this.checked)" />
+          Dark Mode
+        </label>
+      </div>
     </div>
-    <canvas id="confettiCanvas"></canvas>
+    
+
+
+    <!-- Leaderboard Panel -->
+     <div class="leaderboard-container" id="leaderboardMenu">
+  <button class="close-btn" onclick="toggleLeaderboard()">✖</button>
+  <div class="leaderboard-header">
+    <h3>🏆 Leaderboard</h3>
+    <div class="trophy-icon">🥇🥈🥉</div>
   </div>
+  <div class="leaderboard-card">
+    <table id="leaderboardTable">
+      <thead>
+        <tr>
+          <th>Rank</th>
+          <th>Name</th>
+          <th>Score</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</div>
+     
 
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
-  <script src="script/script.js"></script>
 
+    <!-- Game Info Section -->
+    <div id="game-info">
+      <button id="score">Score: 0</button>
+      <div id="action-buttons">
+        <button id="copiesLeft" onclick="copyNumbers()">
+          <span class="material-symbols-outlined">content_copy</span>
+          <span>Copies Left: 5</span>
+        </button>
+      
+        <button id="hint" onclick="showHints()">
+          <span class="material-symbols-outlined">lightbulb</span>
+          <span id="hintsLeft">Hints Left: 5</span>
+        </button>
+      </div>      
+    </div>
+
+    <!-- Game Grid Table -->
+    <table id="new-table"></table>
+
+    <!-- Game Result Card -->
+    <div id="resultCard" class="result-card hidden">
+      <div class="card-content">
+        <h2 id="resultTitle"></h2>
+        <p id="resultMessage"></p>
+        <p id="finalScoreDisplay"></p>
+
+        <div id="scoreSubmission">
+          <input type="text" id="playerNameInput" placeholder="Enter your name" />
+          <button onclick="submitScore()">Submit Score</button>
+          <button onclick="newGameLoading()">Skip</button>
+        </div>
+
+        <button onclick="newGameLoading()">Play Again</button>
+      </div>
+      <canvas id="confettiCanvas"></canvas>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <script src="script/script.js"></script>
+  </div>
 </body>
 </html>
