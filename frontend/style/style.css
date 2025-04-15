@@ -113,7 +113,23 @@ button {
     margin: 10px auto; 
 }
 
-#copiesLeft, #hint {
+#copiesLeft {
+    background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: 10px 16px;
+    font-size: 16px;
+    cursor: pointer;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  #hint {
     background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
     color: #fff;
     border: none;
@@ -238,8 +254,23 @@ button {
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     cursor: default;
   }
+  .leaderboard-btn {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: #4a90e2;
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: 10px 16px;
+    font-size: 16px;
+    font-weight: bold;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: default;
+  }
 
-  .settings-btn:hover {
+  .settings-btn:hover .leaderboard-btn:hover{
     transform: translateY(-1px);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
   }
@@ -257,7 +288,26 @@ button {
     pointer-events: none;
   }
 
+  .leaderboard-container {
+    position: absolute;
+    top: 70px;
+    left: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    opacity: 0;
+    transform: translateX(100%);
+    transition: all 0.4s ease;
+    pointer-events: none;
+  }
+
   .settings-container.show {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+  }
+
+  .leaderboard-container.show {
     opacity: 1;
     transform: translateX(0);
     pointer-events: auto;
