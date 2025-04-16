@@ -56,7 +56,7 @@ function populateTableWithRandomNumbers(tableID, min, max) {
             // Get the current cell
             let cell = tableRef.rows[currentRow].cells[currentCol];
 
-            cell.innerHTML = 1;
+            cell.innerHTML = generateRandomNumbers(1,9);
             cellCount++;
 
             loadLocation = newLoadLocation;
@@ -180,7 +180,10 @@ let secondCell = null;
 // Function to handle cell clicks
 function cellClicked(cellID) {
     const cell = document.getElementById(cellID);
-
+    document.querySelectorAll('.hint-highlight').forEach(el => {
+        el.classList.remove('hint-highlight');
+        el.style.backgroundColor = ''; // Reset background
+      });
     // Deselect if already selected
     if (cell.classList.contains("selected")) {
         cell.classList.remove("selected");
@@ -210,34 +213,41 @@ function cellClicked(cellID) {
     }
 }
 
-// Function to create the table
 function createTable(tableID) {
     let tableRef = document.getElementById(tableID);
-
+  
     for (let row = 0; row < 128; row++) {
-        // Insert a row at the end of the table
-        let newRow = tableRef.insertRow(-1);
-        // Insert a cell in the row at index 0
-        for (let col = 8; col >= 0; col--) {
-            let newCell = newRow.insertCell(0);
-
-            newCell.setAttribute('id', row + "-" + col);
-            newCell.setAttribute('onclick', "cellClicked(this.id)");
-            let newText = document.createTextNode("");
-            newCell.appendChild(newText);
-        }
+      let newRow = tableRef.insertRow(-1);
+  
+      // Initially hide rows beyond the first 4
+      if (row >= 4) {
+        newRow.classList.add("hidden-row");
+      }
+  
+      for (let col = 8; col >= 0; col--) {
+        let newCell = newRow.insertCell(0);
+        newCell.setAttribute('id', row + "-" + col);
+        newCell.setAttribute('onclick', "cellClicked(this.id)");
+        let newText = document.createTextNode("");
+        newCell.appendChild(newText);
+      }
     }
-
-    // Set background color for all cells
-    for (let row = 0; row < 128; row++) {
-        for (let col = 0; col < 9; col++) {
-            document.getElementById(row + "-" + col).style.backgroundColor = "white";
-        }
-    }
-
-    // Populate the table with random numbers
+  
     populateTableWithRandomNumbers(tableID, 1, 9);
-}
+
+    // Animate first 4 rows from left to right
+    for (let row = 0; row < 4; row++) {
+      for (let col = 0; col < 9; col++) {
+        const cell = document.getElementById(`${row}-${col}`);
+        if (cell) {
+          setTimeout(() => {
+            cell.classList.add("cell-reveal");
+          }, col * 100); // Delay by column index
+        }
+      }
+    }
+}    
+  
 
 // Function to check if two cells match
 function checkMatch(firstCell, secondCell, hint = false) {
@@ -267,8 +277,10 @@ function checkMatch(firstCell, secondCell, hint = false) {
         }
 
         // Always clear yellow highlight
-        cellOne.style.backgroundColor = "white";
-        cellTwo.style.backgroundColor = "white";
+        const isDark = document.body.classList.contains("dark-mode");
+        cellOne.style.backgroundColor = isDark ? "#1e1e2f" : "white";
+        cellTwo.style.backgroundColor = isDark ? "#1e1e2f" : "white";
+        
 
         return false;
     }
@@ -311,8 +323,10 @@ function checkMatch(firstCell, secondCell, hint = false) {
                 cellTwo.classList.remove("match-success", "selected");
 
                 // Clear yellow highlight after success
-                cellOne.style.backgroundColor = "white";
-                cellTwo.style.backgroundColor = "white";
+                const isDark = document.body.classList.contains("dark-mode");
+                cellOne.style.backgroundColor = isDark ? "#1e1e2f" : "white";
+                cellTwo.style.backgroundColor = isDark ? "#1e1e2f" : "white";
+                
 
                 checkGameStatus();
             }, 500);
@@ -352,9 +366,9 @@ function checkMatch(firstCell, secondCell, hint = false) {
                 cellOne.classList.remove("match-success", "selected");
                 cellTwo.classList.remove("match-success", "selected");
 
-                // Clear yellow highlight after success
-                cellOne.style.backgroundColor = "white";
-                cellTwo.style.backgroundColor = "white";
+                const isDark = document.body.classList.contains("dark-mode");
+                cellOne.style.backgroundColor = isDark ? "#1e1e2f" : "white";
+                cellTwo.style.backgroundColor = isDark ? "#1e1e2f" : "white";                
 
                 checkGameStatus();
             }, 500);
@@ -373,9 +387,9 @@ function checkMatch(firstCell, secondCell, hint = false) {
             }, 500);
         }
 
-        // Always clear yellow highlight on no match
-        cellOne.style.backgroundColor = "white";
-        cellTwo.style.backgroundColor = "white";
+        const isDark = document.body.classList.contains("dark-mode");
+        cellOne.style.backgroundColor = isDark ? "#1e1e2f" : "white";
+        cellTwo.style.backgroundColor = isDark ? "#1e1e2f" : "white";        
 
         return false;
     }
@@ -404,84 +418,112 @@ function remainingNumbers() {
 // Function to copy remaining numbers onto the table
 function copyNumbers() {
     if (copiesLeft > 0) {
-        let remainingNumberList = remainingNumbers();
-        console.log("Remaining numbers:", remainingNumberList);
-
-        // Find the last row that has at least one number
-        let lastFilledRow = -1;
-        for (let r = 0; r < 128; r++) {
-            for (let c = 0; c < 9; c++) {
-                let cell = document.getElementById(r + "-" + c);
-                if (cell.innerText !== "") {
-                    lastFilledRow = r;
-                }
-            }
-        }
-
-        if (lastFilledRow === -1) {
-            console.log("No filled rows found. Cannot copy.");
-            return;
-        }
-
-        // Set starting point for copy after the last number in that row
-        let startRow = lastFilledRow;
-        let startCol = 0;
+      let remainingNumberList = remainingNumbers();
+      console.log("Remaining numbers:", remainingNumberList);
+  
+      let tableRef = document.getElementById("new-table");
+      let hiddenRows = Array.from(tableRef.querySelectorAll(".hidden-row"));
+  
+      // Calculate how many rows we need to reveal
+      let totalCellsNeeded = remainingNumberList.length;
+      let cellsPerRow = 9;
+      let rowsToReveal = Math.ceil(totalCellsNeeded / cellsPerRow);
+  
+      for (let i = 0; i < rowsToReveal && i < hiddenRows.length; i++) {
+        let rowToReveal = hiddenRows[i];
         
-        for (let c = 8; c >= 0; c--) {
-            let cell = document.getElementById(startRow + "-" + c);
-            if (cell.innerText !== "") {
-                startCol = c + 1;
-                break;
-            }
-        }
+        rowToReveal.classList.remove("hidden-row");
         
-        if (startCol >= 9) {
-            startRow++;
-            startCol = 0;
-        }
-
-        let row = startRow;
-        let col = startCol;
-
-        for (let number of remainingNumberList) {
-            if (row >= 128) {
-                console.log("Reached end of table. Cannot copy more numbers.");
-                break;
-            }
-
-            let cellID = row + "-" + col;
-            let cell = document.getElementById(cellID);
-
-            if (cell.innerText === "") {
-                cell.innerText = number;
-            }
-
-            if (col === 8) {
-                col = 0;
-                row++;
-            } else {
-                col++;
-            }
-        }
-
-        //update loadlocation
-        loadLocation = row + "-" + col;
-        console.log("Updated loadLocation:", loadLocation);
-
-        //decrease from copies
-        copiesLeft--;
-        document.getElementById("copiesLeft").innerHTML = "Copies Left: " + copiesLeft;
-
-        const status = checkGameStatus();
-        if (status === "playing") {
-            parseAndUpdateLoadLocation();
-        }
-        return copiesLeft;
-    } else {
-        window.alert("No more copies left");
+        void rowToReveal.offsetHeight;
+        
+        rowToReveal.classList.add("revealed-row");
+        
+        setTimeout(() => {
+            rowToReveal.classList.remove("revealed-row");
+        }, 500);
     }
-}
-
+  
+      let lastFilledRow = -1;
+      for (let r = 0; r < 128; r++) {
+        for (let c = 0; c < 9; c++) {
+          let cell = document.getElementById(r + "-" + c);
+          if (cell.innerText !== "") {
+            lastFilledRow = r;
+          }
+        }
+      }
+  
+      if (lastFilledRow === -1) {
+        console.log("No filled rows found. Cannot copy.");
+        return;
+      }
+  
+      let startRow = lastFilledRow;
+      let startCol = 0;
+  
+      for (let c = 8; c >= 0; c--) {
+        let cell = document.getElementById(startRow + "-" + c);
+        if (cell.innerText !== "") {
+          startCol = c + 1;
+          break;
+        }
+      }
+  
+      if (startCol >= 9) {
+        startRow++;
+        startCol = 0;
+      }
+  
+      let row = startRow;
+      let col = startCol;
+  
+      for (let number of remainingNumberList) {
+        if (row >= 128) {
+          console.log("Reached end of table. Cannot copy more numbers.");
+          break;
+        }
+  
+        let cellID = row + "-" + col;
+        let cell = document.getElementById(cellID);
+  
+        if (cell.innerText === "") {
+          cell.innerText = number;
+  
+          cell.classList.add("cell-animated");
+          setTimeout(() => {
+            cell.classList.remove("cell-animated");
+          }, 300);
+  
+          if (col === 8) {
+            col = 0;
+            row++;
+          } else {
+            col++;
+          }
+        }
+      }
+  
+      loadLocation = row + "-" + col;
+      console.log("Updated loadLocation:", loadLocation);
+  
+      copiesLeft--;
+      document.getElementById("copiesLeft").innerHTML = "Copies Left: " + copiesLeft;
+  
+      const copyBtn = document.getElementById("copiesLeft");
+      copyBtn.classList.add("clicked");
+      setTimeout(() => copyBtn.classList.remove("clicked"), 150);
+  
+      const status = checkGameStatus();
+      if (status === "playing") {
+        parseAndUpdateLoadLocation();
+      }
+  
+      return copiesLeft;
+    } else {
+      window.alert("No more copies left");
+    }
+  }  
+  
 // Function to check if selected cells are in the same Column
 function isNumbersSameColumn(cellOne, cellTwo) {
     const cellOneLocs = cellOne.split("-");
@@ -492,7 +534,6 @@ function isNumbersSameColumn(cellOne, cellTwo) {
     let cellTwoRow = parseInt(cellTwoLocs[0]);
     let cellTwoCol = parseInt(cellTwoLocs[1]);
 
-    // Check if the cells are in the same column
     if (cellOneCol !== cellTwoCol) {
         return false; 
     }
@@ -524,7 +565,6 @@ function isNumbersSameRow(cellOne, cellTwo) {
     let cellTwoRow = parseInt(cellTwoLocs[0]);
     let cellTwoCol = parseInt(cellTwoLocs[1]);
 
-    // Check if the cells are in the same row
     if (cellOneRow !== cellTwoRow) {
         return false; 
     }
@@ -663,7 +703,6 @@ function updateScore(cellOne, cellTwo) {
     moveScore = 0;
 }
 
-
 // Function to calculate the distance between two cells for updateScore function
 function calculateDistance(cellOne, cellTwo) {
     const cellOneLocs = cellOne.split("-");
@@ -674,17 +713,14 @@ function calculateDistance(cellOne, cellTwo) {
     let cellTwoRow = parseInt(cellTwoLocs[0]);
     let cellTwoCol = parseInt(cellTwoLocs[1]);
 
-    // Calculate the distance (for diagonals)
     const rowDiff = Math.abs(cellOneRow - cellTwoRow);
     const colDiff = Math.abs(cellOneCol - cellTwoCol);
 
-    // For rows or columns, distance is the maximum of rowDiff and colDiff
     return Math.max(rowDiff, colDiff);
 }
 
 // Function to check if a row is clear/empty
 function isRowCleared(row) {
-    // Loop through all columns in the specified row
     for (let col = 0; col < 9; col++) {
         const cellID = row + "-" + col;
         const cell = document.getElementById(cellID);
@@ -701,9 +737,7 @@ function isRowCleared(row) {
 function shiftRowsUp(clearedRow) {
     console.log(`Attempting to shift rows up starting from row ${clearedRow}`);
 
-    // Start from the cleared row and move down to the bottom of the table
     for (let row = clearedRow; row < 127; row++) {
-        // Loop through all columns in the current row
         for (let col = 0; col < 9; col++) {
             const currentCellID = row + "-" + col;
             const belowCellID = (row + 1) + "-" + col;
@@ -711,24 +745,20 @@ function shiftRowsUp(clearedRow) {
             const currentCell = document.getElementById(currentCellID);
             const belowCell = document.getElementById(belowCellID);
 
-            // Copy the number from the cell below to the current cell
             currentCell.innerText = belowCell.innerText;
 
             belowCell.innerText = "";
         }
     }
 
-    // Clear the bottom row after shifting
     for (let col = 0; col < 9; col++) {
         const bottomCellID = "127-" + col;
         const bottomCell = document.getElementById(bottomCellID);
         bottomCell.innerText = "";
     }
 
-    // Check all rows from the clearedRow upwards
     for (let row = clearedRow; row >= 0; row--) {
         if (isRowCleared(row)) {
-        // Check if the row BELOW is also cleared
             if (row + 1 > 127 || isRowCleared(row + 1)) {
                 console.log(`No more rows to shift from below row ${row}, stopping`);
                 break;
@@ -800,14 +830,9 @@ function showHints() {
         return;
     }
 
-    // Clear previous highlights
-    for (let row = 0; row < 128; row++) {
-        for (let col = 0; col < 9; col++) {
-            const cell = document.getElementById(`${row}-${col}`);
-            cell.style.backgroundColor = "white";
-            cell.classList.remove("selected");
-        }
-    }
+    document.querySelectorAll('.hint-highlight').forEach(el => {
+        el.classList.remove('hint-highlight');
+      });
 
     const cellLocs = loadLocation.split("-");
     let loadLocationRow = parseInt(cellLocs[0]);
@@ -828,8 +853,8 @@ function showHints() {
 
                     if (checkMatch(cellID1, cellID2, true)) {
                         // Highlight the hint cells
-                        cell1.style.backgroundColor = "yellow";
-                        cell2.style.backgroundColor = "yellow";
+                        cell1.classList.add("hint-highlight");
+                        cell2.classList.add("hint-highlight");                        
 
                         // Store the current hint for later tracking
                         currentHint = [cellID1, cellID2];
@@ -847,7 +872,6 @@ function showHints() {
         window.alert("No possible plays available!");
     }
 }
-
 
 // Function to show the results to player (win/loss)
 function showResultCard(title, message, celebrate = false) {
@@ -927,16 +951,42 @@ function handleDifficultyChange(level) {
     console.log("Difficulty set to:", level);
 }
 
+const bgMusic = new Audio('/Users/shahadaljneibi/Desktop/NumberMatch-3/frontend/assets/puzzle-game-loop-bright-casual-video-game-music-249201.mp3');
+bgMusic.loop = true;
+bgMusic.volume = 0.3; 
+let isMusicPlaying = false;
+
 // Function to handle the sound  
 function handleSoundToggle(isOn) {
-    localStorage.setItem("sound", isOn);
-    console.log("Sound is", isOn ? "on" : "off");
+  soundEnabled = isOn;
+  localStorage.setItem("sound", isOn);
+  console.log("Sound is", isOn ? "on" : "off");
+
+  if (isOn) {
+    if (!isMusicPlaying) {
+      bgMusic.play();
+      isMusicPlaying = true;
+    }
+  } else {
+    bgMusic.pause();
+    isMusicPlaying = false;
+  }
 }
+
+// Start music on first user interaction (browser autoplay fix)
+window.addEventListener("click", () => {
+  if (soundEnabled && !isMusicPlaying) {
+    bgMusic.play();
+    isMusicPlaying = true;
+  }
+}, { once: true });
+
 
 // Function to handle the theme of the game  
 function toggleTheme(isDark) {
     document.body.classList.toggle("dark-mode", isDark);
-    localStorage.setItem("theme", isDark ? "dark" : "light");
+    cellOne.style.backgroundColor = isDark ? "#1e1e2f" : "white";
+    cellTwo.style.backgroundColor = isDark ? "#1e1e2f" : "white";
 }
 
 // Load saved settings on page load
@@ -944,12 +994,20 @@ window.onload = () => {
     const difficulty = localStorage.getItem("difficulty");
     const sound = localStorage.getItem("sound") === "true";
     const theme = localStorage.getItem("theme");
-
-    if (difficulty) document.getElementById("difficulty").value = difficulty;
+  
+    if (difficulty) document.getElementById("difficultySlider").value = difficulty;
     document.getElementById("soundToggle").checked = sound;
+    soundEnabled = sound;
     document.getElementById("themeToggle").checked = (theme === "dark");
+    
+    if (sound) {
+        console.log("Sound enabled, will auto-play on click.");
+      }
+    
+  
     if (theme === "dark") document.body.classList.add("dark-mode");
-};
+  };
+  
 
 
 

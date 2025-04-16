@@ -10,6 +10,7 @@
 </head>
 
 <body onload="newGameLoading()">
+  
   <div class="container">
 
     <!-- Page Title -->
@@ -21,33 +22,45 @@
       <button class="leaderboard-btn" onclick="toggleLeaderboard()">🏆 Leader Board</button>
     </div>
 
-    <!-- Settings Panel -->
-    <div class="settings-container" id="settingsMenu">
-      <button class="close-btn" onclick="toggleSettings()">✖</button>
-      <div class="card">
-        <h3>Difficulty</h3>
-        <p id="difficultyLabel">Loading...</p>
-      </div>
-      <div class="card">
-        <h3>Sound</h3>
-        <label class="toggle-label">
-          <input type="checkbox" id="soundToggle" onchange="handleSoundToggle(this.checked)" />
-          Enable Sound
-        </label>
-      </div>
-      <div class="card">
-        <h3>Theme</h3>
-        <label class="toggle-label">
-          <input type="checkbox" id="themeToggle" onchange="toggleTheme(this.checked)" />
-          Dark Mode
-        </label>
+<!---------- Settings ---------->
+<div class="settings-container" id="settingsMenu">
+  <button class="close-btn" onclick="toggleSettings()">✖</button>
+  <div class="settings-header">
+    <h3>⚙️ Game Settings</h3>
+  </div>
+
+  <div class="settings-card card">
+    <h3>Difficulty</h3>
+    <div class="slider-container">
+      <input type="range" min="1" max="3" value="2" class="slider" id="difficultySlider">
+      <div class="slider-labels">
+        <span>Easy</span>
+        <span>Normal</span>
+        <span>Hard</span>
       </div>
     </div>
-    
+  </div>
 
+  <div class="card">
+    <h3>Sound</h3>
+    <label class="switch">
+      <input type="checkbox" id="soundToggle" onchange="handleSoundToggle(this.checked)">
+      Enable Sound
+      <span class="slider-switch"></span>
+    </label>
+  </div>
 
-    <!-- Leaderboard Panel -->
-     <div class="leaderboard-container" id="leaderboardMenu">
+  <div class="card">
+    <h3>Theme</h3>
+    <label class="switch">
+      <input type="checkbox" id="themeToggle" onchange="toggleTheme(this.checked)">
+      Dark Mode
+      <span class="slider-switch"></span>
+    </label>
+  </div>
+</div>
+
+  <div class="leaderboard-container" id="leaderboardMenu">
   <button class="close-btn" onclick="toggleLeaderboard()">✖</button>
   <div class="leaderboard-header">
     <h3>🏆 Leaderboard</h3>
@@ -66,8 +79,6 @@
     </table>
   </div>
 </div>
-     
-
 
     <!-- Game Info Section -->
     <div id="game-info">
@@ -85,8 +96,9 @@
       </div>      
     </div>
 
-    <!-- Game Grid Table -->
+
     <table id="new-table"></table>
+
 
     <!-- Game Result Card -->
     <div id="resultCard" class="result-card hidden">
@@ -94,17 +106,18 @@
         <h2 id="resultTitle"></h2>
         <p id="resultMessage"></p>
         <p id="finalScoreDisplay"></p>
-
+    
         <div id="scoreSubmission">
           <input type="text" id="playerNameInput" placeholder="Enter your name" />
-          <button onclick="submitScore()">Submit Score</button>
+          <button onclick="submitScore()" id="submitScoreBtn">Submit Score</button>
           <button onclick="newGameLoading()">Skip</button>
         </div>
-
+    
         <button onclick="newGameLoading()">Play Again</button>
       </div>
       <canvas id="confettiCanvas"></canvas>
     </div>
+    
 
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <script src="script/script.js"></script>
