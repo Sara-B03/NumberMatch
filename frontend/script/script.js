@@ -41,7 +41,7 @@ function populateTableWithRandomNumbers(tableID, min, max) {
     let cellCount = 0;
 
     // global loadLocation variable
-    loadLocation = "0-0"; // Reset to the starting cell
+    loadLocation = "0-0"; 
 
     for (let row = 0; row < tableRef.rows.length; row++) {
         for (let col = 0; col < tableRef.rows[row].cells.length; col++) {
@@ -50,13 +50,11 @@ function populateTableWithRandomNumbers(tableID, min, max) {
                 return;
             }
 
-            // Parse and update loadLocation
             const { currentRow, currentCol, newLoadLocation } = parseAndUpdateLoadLocation(loadLocation);
 
-            // Get the current cell
             let cell = tableRef.rows[currentRow].cells[currentCol];
 
-            cell.innerHTML = generateRandomNumbers(1,9);
+            cell.innerHTML = 1;
             cellCount++;
 
             loadLocation = newLoadLocation;
@@ -180,19 +178,18 @@ let secondCell = null;
 // Function to handle cell clicks
 function cellClicked(cellID) {
     const cell = document.getElementById(cellID);
-    document.querySelectorAll('.hint-highlight').forEach(el => {
-        el.classList.remove('hint-highlight');
-        el.style.backgroundColor = ''; // Reset background
-      });
-    // Deselect if already selected
-    if (cell.classList.contains("selected")) {
+
+    if (cellID === firstCell) {
         cell.classList.remove("selected");
-        if (firstCell === cellID) firstCell = null;
-        else if (secondCell === cellID) secondCell = null;
+        firstCell = null;
         return;
     }
 
-    // Reset if two are already selected
+    document.querySelectorAll('.hint-highlight, .selected, .matched').forEach(el => {
+        el.classList.remove('hint-highlight', 'selected', 'matched');
+        el.style.backgroundColor = '';
+    });
+
     if (firstCell && secondCell) {
         document.getElementById(firstCell).classList.remove("selected");
         document.getElementById(secondCell).classList.remove("selected");
@@ -200,18 +197,19 @@ function cellClicked(cellID) {
         secondCell = null;
     }
 
-    // Add selection
     cell.classList.add("selected");
-    if (!firstCell) firstCell = cellID;
-    else {
-        secondCell = cellID;
 
-        // Run match check after slight delay
+    if (!firstCell) {
+        firstCell = cellID;
+    } else if (!secondCell) {
+        secondCell = cellID;
         setTimeout(() => {
             checkMatch(firstCell, secondCell);
         }, 50);
     }
 }
+
+  
 
 function createTable(tableID) {
     let tableRef = document.getElementById(tableID);
@@ -219,7 +217,6 @@ function createTable(tableID) {
     for (let row = 0; row < 128; row++) {
       let newRow = tableRef.insertRow(-1);
   
-      // Initially hide rows beyond the first 4
       if (row >= 4) {
         newRow.classList.add("hidden-row");
       }
@@ -235,26 +232,23 @@ function createTable(tableID) {
   
     populateTableWithRandomNumbers(tableID, 1, 9);
 
-    // Animate first 4 rows from left to right
     for (let row = 0; row < 4; row++) {
       for (let col = 0; col < 9; col++) {
         const cell = document.getElementById(`${row}-${col}`);
         if (cell) {
           setTimeout(() => {
             cell.classList.add("cell-reveal");
-          }, col * 100); // Delay by column index
+          }, col * 100); 
         }
       }
     }
 }    
   
-
 // Function to check if two cells match
 function checkMatch(firstCell, secondCell, hint = false) {
     const cellOne = document.getElementById(firstCell);
     const cellTwo = document.getElementById(secondCell);
 
-    // Apply selected styling
     if (!hint) {
         cellOne.classList.add("selected");
         cellTwo.classList.add("selected");
@@ -276,10 +270,8 @@ function checkMatch(firstCell, secondCell, hint = false) {
             }, 500);
         }
 
-        // Always clear yellow highlight
-        const isDark = document.body.classList.contains("dark-mode");
-        cellOne.style.backgroundColor = isDark ? "#1e1e2f" : "white";
-        cellTwo.style.backgroundColor = isDark ? "#1e1e2f" : "white";
+        cellOne.style.backgroundColor = "";
+        cellTwo.style.backgroundColor = "";
         
 
         return false;
@@ -309,7 +301,6 @@ function checkMatch(firstCell, secondCell, hint = false) {
 
                 parseAndUpdateLoadLocation();
 
-                // Check if matched cells match the current hint
                 if (currentHint && (
                     (firstCell === currentHint[0] && secondCell === currentHint[1]) ||
                     (firstCell === currentHint[1] && secondCell === currentHint[0])
@@ -322,10 +313,8 @@ function checkMatch(firstCell, secondCell, hint = false) {
                 cellOne.classList.remove("match-success", "selected");
                 cellTwo.classList.remove("match-success", "selected");
 
-                // Clear yellow highlight after success
-                const isDark = document.body.classList.contains("dark-mode");
-                cellOne.style.backgroundColor = isDark ? "#1e1e2f" : "white";
-                cellTwo.style.backgroundColor = isDark ? "#1e1e2f" : "white";
+                cellOne.style.backgroundColor = "";
+                cellTwo.style.backgroundColor = "";
                 
 
                 checkGameStatus();
@@ -353,7 +342,6 @@ function checkMatch(firstCell, secondCell, hint = false) {
 
                 parseAndUpdateLoadLocation();
 
-                // Check if matched cells match the current hint
                 if (currentHint && (
                     (firstCell === currentHint[0] && secondCell === currentHint[1]) ||
                     (firstCell === currentHint[1] && secondCell === currentHint[0])
@@ -366,9 +354,9 @@ function checkMatch(firstCell, secondCell, hint = false) {
                 cellOne.classList.remove("match-success", "selected");
                 cellTwo.classList.remove("match-success", "selected");
 
-                const isDark = document.body.classList.contains("dark-mode");
-                cellOne.style.backgroundColor = isDark ? "#1e1e2f" : "white";
-                cellTwo.style.backgroundColor = isDark ? "#1e1e2f" : "white";                
+                cellOne.style.backgroundColor = "";
+                cellTwo.style.backgroundColor = "";
+                
 
                 checkGameStatus();
             }, 500);
@@ -387,9 +375,8 @@ function checkMatch(firstCell, secondCell, hint = false) {
             }, 500);
         }
 
-        const isDark = document.body.classList.contains("dark-mode");
-        cellOne.style.backgroundColor = isDark ? "#1e1e2f" : "white";
-        cellTwo.style.backgroundColor = isDark ? "#1e1e2f" : "white";        
+        cellOne.style.backgroundColor = "";
+        cellTwo.style.backgroundColor = "";        
 
         return false;
     }
@@ -399,13 +386,11 @@ function checkMatch(firstCell, secondCell, hint = false) {
 function remainingNumbers() {
     let remainingNumberList = [];
 
-    // Loop through all rows and cells in the table
     for (let row = 0; row < 128; row++) {
         for (let col = 0; col < 9; col++) {
-            let cellID = row + "-" + col; // Generate cell ID
+            let cellID = row + "-" + col; 
             let cell = document.getElementById(cellID);
 
-            // Check if the cell has a number (not empty)
             if (cell.innerText !== "") {
                 remainingNumberList.push(parseInt(cell.innerText));
             }
@@ -538,11 +523,9 @@ function isNumbersSameColumn(cellOne, cellTwo) {
         return false; 
     }
 
-    // Determine the direction to check (up or down)
     let startRow = Math.min(cellOneRow, cellTwoRow);
     let endRow = Math.max(cellOneRow, cellTwoRow);
 
-    // Check if there are any blocking numbers between the two cells
     for (let row = startRow + 1; row < endRow; row++) {
         let cellID = row + "-" + cellOneCol;
         let cell = document.getElementById(cellID);
@@ -569,11 +552,9 @@ function isNumbersSameRow(cellOne, cellTwo) {
         return false; 
     }
 
-    // Determine the direction to check (left or right)
     let startCol = Math.min(cellOneCol, cellTwoCol);
     let endCol = Math.max(cellOneCol, cellTwoCol);
 
-    // Check if there are any blocking numbers between the two cells
     for (let col = startCol + 1; col < endCol; col++) {
         let cellID = cellOneRow + "-" + col;
         let cell = document.getElementById(cellID);
@@ -596,16 +577,13 @@ function isNumbersDiagonal(cellOne, cellTwo) {
     let cellTwoRow = parseInt(cellTwoLocs[0]);
     let cellTwoCol = parseInt(cellTwoLocs[1]);
 
-    // Check if the cells are diagonally aligned
     if (Math.abs(cellOneRow - cellTwoRow) !== Math.abs(cellOneCol - cellTwoCol)) {
         return false; 
     }
 
-    // Determine the direction of the diagonal
     const rowStep = cellTwoRow > cellOneRow ? 1 : -1; // 1 for downward, -1 for upward
     const colStep = cellTwoCol > cellOneCol ? 1 : -1; // 1 for rightward, -1 for leftward
 
-    // Check for blocking numbers along the diagonal
     let currentRow = cellOneRow + rowStep;
     let currentCol = cellOneCol + colStep;
 
@@ -613,12 +591,10 @@ function isNumbersDiagonal(cellOne, cellTwo) {
         const cellID = currentRow + "-" + currentCol;
         const cell = document.getElementById(cellID);
 
-        // If a cell is not empty, it's blocking the diagonal
         if (cell.innerText !== "") {
             return false; 
         }
 
-        // Move to the next cell in the diagonal
         currentRow += rowStep;
         currentCol += colStep;
     }
@@ -793,7 +769,6 @@ function getAllHints() {
     let loadLocationRow = parseInt(cellLocs[0]);
     let loadLocationCol = parseInt(cellLocs[1]);
 
-    // Loop through all cells up to the loadLocation
     for (let row = 0; row <= loadLocationRow; row++) {
         for (let col = 0; col < 9; col++) {
             const currentLocation = row + "-" + col;
@@ -801,7 +776,6 @@ function getAllHints() {
 
             if (currentCell.innerText === "") continue;
 
-            // Check for matches in the same row, column, or diagonal
             for (let secondRow = row; secondRow <= loadLocationRow; secondRow++) {
                 for (let secondCol = (secondRow === row ? col + 1 : 0); secondCol < 9; secondCol++) {
                     const secondLocation = secondRow + "-" + secondCol;
@@ -809,7 +783,6 @@ function getAllHints() {
 
                     if (secondCell.innerText === "" || currentLocation === secondLocation) continue;
 
-                    // Check if the cells match
                     if (checkMatch(currentLocation, secondLocation, true)) {
                         hintsList.push(currentLocation + "WITH" + secondLocation);
                     }
@@ -852,11 +825,9 @@ function showHints() {
                     if (cellID1 === cellID2 || cell2.innerText === "") continue;
 
                     if (checkMatch(cellID1, cellID2, true)) {
-                        // Highlight the hint cells
                         cell1.classList.add("hint-highlight");
                         cell2.classList.add("hint-highlight");                        
 
-                        // Store the current hint for later tracking
                         currentHint = [cellID1, cellID2];
                         return;
                     }
@@ -941,7 +912,6 @@ function toggleLeaderboard() {
 
     document.getElementById("leaderboardMenu").classList.toggle("show");
     
-    // Fetch and display the leaderboard when opened
     fetchLeaderboard();
 }
 
@@ -982,12 +952,20 @@ window.addEventListener("click", () => {
 }, { once: true });
 
 
+let isDarkMode = false;
+
 // Function to handle the theme of the game  
-function toggleTheme(isDark) {
-    document.body.classList.toggle("dark-mode", isDark);
-    cellOne.style.backgroundColor = isDark ? "#1e1e2f" : "white";
-    cellTwo.style.backgroundColor = isDark ? "#1e1e2f" : "white";
+function toggleTheme() {
+    isDarkMode = !isDarkMode;
+    document.body.classList.toggle("dark-mode", isDarkMode);
+
+    document.querySelectorAll(".cell").forEach(cell => {
+        cell.style.backgroundColor = "";
+    });
 }
+
+document.getElementById("toggleThemeBtn").addEventListener("click", toggleTheme);
+
 
 // Load saved settings on page load
 window.onload = () => {

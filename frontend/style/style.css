@@ -1,6 +1,37 @@
 /*Google Fonts - Quicksand */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Quicksand:wght@300..700&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
 
+:root {
+  --cell-bg: #ffffff;
+  --selected-bg: #d0eaff;
+  --success-bg: #c8f7c5;
+  --fail-bg: #f7c5c5;
+}
+
+body.dark-mode {
+  --cell-bg: #1e1e1e;
+  --selected-bg: #2c3e50;
+  --success-bg: #2ecc71;
+  --fail-bg: #e74c3c;
+}
+
+.cell {
+  background-color: var(--cell-bg);
+  transition: background-color 0.3s ease;
+}
+
+.cell.selected {
+  background-color: var(--selected-bg);
+}
+
+.cell.match-success {
+  background-color: var(--success-bg);
+}
+
+.cell.match-fail {
+  background-color: var(--fail-bg);
+}
+
 *{
     margin: 0;
     padding: 0;
@@ -41,7 +72,7 @@ h1 {
     font-weight: bold;
     text-shadow: 
     1px 2px 2px rgba(0, 0, 0, 0.4),
-    -2px -2px 1px rgba(255, 255, 255, 0.2); /* 3D effect */
+    -2px -2px 1px rgba(255, 255, 255, 0.2); 
   }
 
 
@@ -63,20 +94,19 @@ h1 {
 
 
 #new-table td {
-    border: 2px solid #151a2e; 
-    width: 100px; 
-    height: 100px; 
-    text-align: center;
-    font-size: 2.5em;
-    cursor: pointer;
-    background: #fff;
-    border: 1px solid rgb(241, 241, 241); 
-    border-radius: 5px; 
-    background-color: white; 
-    transition: background-color 0.3s ease;
+  border: 2px solid #151a2e; 
+  width: 100px; 
+  height: 100px; 
+  text-align: center;
+  font-size: 2.5em;
+  cursor: pointer;
+  background: var(--cell-bg);
+  border: 1px solid rgb(241, 241, 241); 
+  border-radius: 5px; 
 }
 
-td:hover {
+
+#new-table td:hover {
   background-color: #f1faff;
   transition: background-color 0.2s ease-in-out;
 }
@@ -446,9 +476,14 @@ button {
     transform: translateY(-1px);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
   }
-
-/* Settings Panel Styling */
-/* Switch Styling */
+  .toggle-labelStg {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+  }
+  
 .switch {
   position: relative;
   display: inline-block;
@@ -534,13 +569,13 @@ button {
   letter-spacing: 0.5px;
 }
 
-/* Card Styling */
 .card {
   background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
   padding: 18px;
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 2px rgba(0, 0, 0, 0.08);
   border: 1px solid rgba(0, 0, 0, 0.05);
+  gap: 100px;
 }
 
 .card h3,
@@ -548,10 +583,9 @@ button {
   margin: 0 0 12px 0;
   font-size: 16px;
   color: #34495e;
-  font-weight: 500;
+  font-weight: 600;
 }
 
-/* Slider and Labels */
 .slider-container {
   width: 100%;
   margin-top: 10px;
@@ -569,13 +603,6 @@ button {
   width: 100%;
 }
 
-  
-  .toggle-label {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 14px;
-  }
   
 .leaderboard-container {
   position: absolute;
@@ -723,9 +750,6 @@ button {
     margin-top: 8px;
   }
 
-  .tile:hover {
-    background: #e0e7ff;
-  }
 
   #confettiCanvas {
     position: absolute;
@@ -738,6 +762,54 @@ button {
 }
 
 /*----------------Dark Mode Styles------------------------------*/
+#new-table td {
+  background-color: var(--cell-bg);
+  transition: background-color 0.3s ease;
+}
+
+body.dark-mode {
+  background-color: #121212;
+  color: #f0f0f0;
+}
+
+body.dark-mode #new-table {
+  background-color: #171723;
+  color: #e0e0e0;
+}
+
+body.dark-mode #new-table td {
+  background-color: #1e1e2f;
+  color: #ffffff;
+  border: 1px solid #1e1e2f;
+}
+
+body.dark-mode #new-table td:hover {
+  background-color: #30304d;
+}
+
+body.dark-mode .selected {
+  background-color: #2e3c48;
+  border-color: #4e5a66;
+  box-shadow: inset 0 0 0 3px #5d6b77;
+}
+
+body.dark-mode .match-success {
+  background-color: #336b3f !important;
+  color: #a8ffb8;
+}
+
+body.dark-mode .match-fail {
+  background-color: #7d2e2e !important;
+  color: #ffb2b2;
+}
+
+body.dark-mode #copiesLeft,
+body.dark-mode #hint {
+  background: #333;
+  color: #fff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
 body.dark-mode {
   background: #1b1b2a;
   color: #eee;
@@ -747,21 +819,27 @@ body.dark-mode .tile {
   color: #fff;
 }
 
+body.dark-mode .hint-highlight {
+  background-color: #4a455d !important; 
+}
+
+body.dark-mode .hint-highlight::after {
+  border: 1px solid #ffd43b; 
+}
 
 
 body.dark-mode .card {
   background: #2d2d44;
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
-  border: 1px solid #3a3a4d;
+  border: 1px solid #2c2c3f;
+  gap: 1000px;
 }
 
 body.dark-mode .card h3 {
   color: #e4e4e4;
 }
 
-body.dark-mode .tile:hover {
-  background: #3a3a4d;
-}
+
 
 body.dark-mode h1{
   color: white;
@@ -788,45 +866,101 @@ body.dark-mode .leaderboard-btn {
 }
 
 body.dark-mode .settings-container{
-  background: #2a2a3d;
+  background: #1f1f33;
 
 }
 
-/* For the container */
+/* === DARK MODE === */
 body.dark-mode .leaderboard-container {
-  background: #2f2f4a;
+  background-color: #1f1f33;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+}
+
+body.dark-mode .leaderboard-header h3 {
+  color: #f1f1f1;
+}
+
+body.dark-mode .leaderboard-card {
+  background: linear-gradient(135deg, #28283b 0%, #1e1e2f 100%);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+body.dark-mode #leaderboardTable thead th {
+  background-color: #354295; 
+  color: #ffffff;
+}
+
+body.dark-mode #leaderboardTable tbody tr {
+  background-color: #28283b;
+  box-shadow: 0 2px 5px rgba(255, 255, 255, 0.03);
+}
+
+body.dark-mode #leaderboardTable tbody tr:hover {
+  transform: translateY(-0.5px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+
+}
+
+body.dark-mode #leaderboardTable tr td {
   color: #e0e0e0;
-  border: 1px solid #3a3a4d;
-  border-radius: 8px; /* Add if needed */
-  padding: 15px; /* Add if needed */
 }
 
-/* For the table */
-body.dark-mode .leaderboard-container table  {
-  background: #252538;
-  color: #e0e0e0; 
-  border: 1px solid #3a3a4d;
-  width: 100%;
-  border-collapse: collapse;
+body.dark-mode #leaderboardTable tr td:first-child {
+  color: #90caf9; 
 }
 
-/* Table cells */
-body.dark-mode #leaderboardTable td,
-body.dark-mode #leaderboardTable th {
-  border: 1px solid #3a3a4d;
-  padding: 8px 12px;
-  gap: 3px;
+body.dark-mode #leaderboardTable tr td:last-child {
+  color: #81c784; 
 }
 
-/* Header */
-body.dark-mode #leaderboardTable th {
-  background: #38384d;
-  color: #e2e2e2; /* Your accent color */
+
+/* === DARK MODE Result card === */
+body.dark-mode .card-content {
+  background: #1e1e2f; 
+  color: #f1f1f1;      
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
 }
 
-/* Alternate rows */
-body.dark-mode #leaderboardTable td {
-  background: #2a2a3d;
+/* Input Field Dark Style */
+body.dark-mode #playerNameInput {
+  background-color: #2c2c3a;
+  color: #f1f1f1;
+  border-color: #555;
+}
+
+body.dark-mode #playerNameInput:focus {
+  border-color: #64b5f6;
+}
+
+/* Submit Score - Blue */
+body.dark-mode #submitScoreBtn {
+  background-color: #2196F3;
+  color: white;
+}
+
+body.dark-mode #submitScoreBtn:hover {
+  background-color: #1976D2;
+}
+
+/* Skip - Gray */
+body.dark-mode #scoreSubmission button:last-child {
+  background-color: #616161;
+}
+
+body.dark-mode #scoreSubmission button:last-child:hover {
+  background-color: #424242;
+}
+
+/* Play Again - Green */
+body.dark-mode .card-content > button:not(#scoreSubmission button) {
+  background-color: #4CAF50;
+  color: white;
+}
+
+body.dark-mode .card-content > button:not(#scoreSubmission button):hover {
+  background-color: #388e3c;
 }
 
 .hidden {
@@ -877,3 +1011,6 @@ body.dark-mode #leaderboardTable td {
 .hidden {
   display: none;
 }
+
+
+
