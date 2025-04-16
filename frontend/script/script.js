@@ -865,12 +865,12 @@ function showHints() {
         }
     }
 
-    if (copiesLeft === 0) {
-        window.alert("Sorry, no more moves left. You lost. Please try again.");
-        newGameLoading();
+    if (copiesLeft === 0 && getAllHints().length === 0) {
+        showResultCard("😢 Game Over", "No possible moves and no copies left!", false);
     } else {
         window.alert("No possible plays available!");
     }
+    
 }
 
 // Function to show the results to player (win/loss)
@@ -908,19 +908,19 @@ function showResultCard(title, message, celebrate = false) {
 // Function to check if the player wins or losses
 function checkGameStatus() {
     const remaining = remainingNumbers();
-
     console.log("Remaining Numbers:", remaining);
     console.log("Remaining Count:", remaining.length);
     console.log("Copies Left:", copiesLeft);
-    console.log("Hints Left:", hintsList);
+
+    const hints = getAllHints();
 
     if (remaining.length === 0) {
         showResultCard("🎉 You Won!", "You cleared the board!", true);
         return "won";
     }
 
-    if (copiesLeft <= 0 && hintsList <= 0) {
-        showResultCard("😢 Game Over", "No more copies or hints!", false);
+    if (copiesLeft <= 0 && hints.length === 0) {
+        showResultCard("😢 Game Over", "No more copies or possible matches!", false);
         return "lost";
     }
 
