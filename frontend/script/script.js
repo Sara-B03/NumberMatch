@@ -1006,7 +1006,20 @@ window.onload = () => {
     
   
     if (theme === "dark") document.body.classList.add("dark-mode");
+
+    const tutorialShown = localStorage.getItem("tutorialShown");
+    if (!tutorialShown) { showTutorialModal(); }
   };
+
+function showTutorialModal() {
+    document.getElementById("tutorialModal").classList.remove("hidden");
+}
+
+function closeTutorial() {
+    document.getElementById("tutorialModal").classList.add("hidden");
+    localStorage.setItem("tutorialShown", "true");
+}
+
   
 
 
