@@ -153,7 +153,7 @@ h1 {
     transform: translateX(0);
   }
 }
-/* */
+
 @keyframes pulse-scale {
   0% {
     transform: scale(1);
@@ -308,7 +308,6 @@ button {
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
   }
  
-/* Hint highlight style */
 .hint-highlight {
   background-color: #fff3bf !important;  
   position: relative; 
@@ -365,7 +364,6 @@ button {
   z-index: 9999;
 }
 
-/* Inner Card Content */
 .card-content {
   background: white;
   padding: 2rem;
@@ -374,13 +372,11 @@ button {
   box-shadow: 0 0 20px rgba(0,0,0,0.3);
 }
 
-/* Title */
 .card-content h2 {
   font-size: 2rem;
   margin-bottom: 1rem;
 }
 
-/* Input Field */
 #playerNameInput {
   margin-top: 1rem;
   padding: 0.5rem 1rem;
@@ -398,7 +394,6 @@ button {
   border-color: #2196F3; 
 }
 
-/* General Button Styling */
 .card-content button {
   margin-top: 1rem;
   padding: 0.5rem 1.5rem;
@@ -410,7 +405,6 @@ button {
   color: white;
 }
 
-/* Submit Score - Blue */
 #submitScoreBtn {
   background-color: #2196F3;
   color: white;
@@ -941,7 +935,6 @@ body.dark-mode .card-content {
   box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
 }
 
-/* Input Field Dark Style */
 body.dark-mode #playerNameInput {
   background-color: #2c2c3a;
   color: #f1f1f1;
@@ -952,7 +945,6 @@ body.dark-mode #playerNameInput:focus {
   border-color: #64b5f6;
 }
 
-/* Submit Score - Blue */
 body.dark-mode #submitScoreBtn {
   background-color: #2196F3;
   color: white;
@@ -962,7 +954,6 @@ body.dark-mode #submitScoreBtn:hover {
   background-color: #1976D2;
 }
 
-/* Skip - Gray */
 body.dark-mode #scoreSubmission button:last-child {
   background-color: #616161;
 }
@@ -971,7 +962,6 @@ body.dark-mode #scoreSubmission button:last-child:hover {
   background-color: #424242;
 }
 
-/* Play Again - Green */
 body.dark-mode .card-content > button:not(#scoreSubmission button) {
   background-color: #4CAF50;
   color: white;
@@ -1032,7 +1022,27 @@ body.dark-mode .card-content > button:not(#scoreSubmission button):hover {
 
 
 /* Responsive Design Enhancements */
-/* Responsive Design Enhancements */
+@media (max-width: 600px) {
+  .settings-container,
+  .leaderboard-container {
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    width: 90%;
+    max-width: 320px;
+    padding: 20px;
+    border-radius: 12px;
+    background-color: #fff;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+}
+
+
 @media (max-width: 1024px) {
   #new-table td {
     width: 80px;
@@ -1085,9 +1095,9 @@ body.dark-mode .card-content > button:not(#scoreSubmission button):hover {
   .settings-container,
   .leaderboard-container {
     position: fixed;
-    top: 10%; /* Adjust vertical position */
+    top: 10%; 
     left: 50%;
-    transform: translateX(-50%); /* Center horizontally */
+    transform: translateX(-50%); 
     min-width: 90%;
   }
 
@@ -1138,30 +1148,7 @@ body.dark-mode .card-content > button:not(#scoreSubmission button):hover {
   }
 }
 
-@media (max-width: 600px) {
-  .settings-container,
-  .leaderboard-container {
-    position: fixed;
-    top: 10%; 
-    left: 50%;
-    transform: translateX(-50%); 
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    padding: 25px;
-    background-color: #ffffff;
-    border-radius: 16px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
-    opacity: 0;
-    transition: all 0.4s ease;
-    pointer-events: none;
-    z-index: 1000;
-    min-width: 300px;
-    max-width: 90%;
-    max-height: 90vh;
-    overflow-y: auto;
-    border: 1px solid rgba(0, 0, 0, 0.1);
-  }
-}
+
+
 
 
