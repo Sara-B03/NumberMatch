@@ -1027,8 +1027,7 @@ function closeTutorial() {
     document.getElementById("tutorialModal").classList.add("hidden");
     localStorage.setItem("tutorialShown", "true");
 }
-
-  
+ 
 
 
 

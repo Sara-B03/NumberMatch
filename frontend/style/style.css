@@ -178,9 +178,6 @@ h1 {
   animation: pulse-scale 0.8s ease;
 }
 
-
-
-
 #copiesLeft.clicked {
   transform: scale(0.97);
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
@@ -310,10 +307,7 @@ button {
     transform: scale(1.04);
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
   }
-
-
-
-   
+ 
 /* Hint highlight style */
 .hint-highlight {
   background-color: #fff3bf !important;  
@@ -426,9 +420,6 @@ button {
   background-color: #1976D2;
 }
 
-
-
-/* Skip - Gray */
 #scoreSubmission button:last-child {
   background-color: #9E9E9E;
 }
@@ -437,7 +428,6 @@ button {
   background-color: #757575;
 }
 
-/* Play Again - Green */
 .card-content > button:not(#scoreSubmission button) {
   background-color: #4CAF50;
 }
@@ -446,7 +436,6 @@ button {
   background-color: #388e3c;
 }
 
-/* Utility Classes */
 .hidden {
   display: none;
 }
@@ -454,8 +443,6 @@ button {
 .hidden-row {
   display: none;
 }
-
-  
 
 .top-bar {
   display: flex;
@@ -1045,7 +1032,7 @@ body.dark-mode .card-content > button:not(#scoreSubmission button):hover {
 
 
 /* Responsive Design Enhancements */
-
+/* Responsive Design Enhancements */
 @media (max-width: 1024px) {
   #new-table td {
     width: 80px;
@@ -1068,6 +1055,8 @@ body.dark-mode .card-content > button:not(#scoreSubmission button):hover {
   .leaderboard-container {
     min-width: 250px;
     top: 60px;
+    left: 50%;
+    transform: translateX(-50%);
   }
 }
 
@@ -1096,9 +1085,9 @@ body.dark-mode .card-content > button:not(#scoreSubmission button):hover {
   .settings-container,
   .leaderboard-container {
     position: fixed;
-    top: 80px;
+    top: 10%; /* Adjust vertical position */
     left: 50%;
-    transform: translateX(-50%);
+    transform: translateX(-50%); /* Center horizontally */
     min-width: 90%;
   }
 
@@ -1148,4 +1137,31 @@ body.dark-mode .card-content > button:not(#scoreSubmission button):hover {
     align-items: flex-start;
   }
 }
+
+@media (max-width: 600px) {
+  .settings-container,
+  .leaderboard-container {
+    position: fixed;
+    top: 10%; 
+    left: 50%;
+    transform: translateX(-50%); 
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 25px;
+    background-color: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+    opacity: 0;
+    transition: all 0.4s ease;
+    pointer-events: none;
+    z-index: 1000;
+    min-width: 300px;
+    max-width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+  }
+}
+
 
