@@ -4,6 +4,47 @@ let loadLocation = "0-0";
 let copiesLeft = 5;
 let moveScore = 0;
 let intialNumbers = [];
+let difficulty1 = [[6, 5, 9, 3, 4, 5, 6, 3, 4, 7, 2, 5, 1, 2, 9, 8, 5, 1, 3, 1, 6, 7, 6, 7, 4, 7, 4, 5, 8, 5, 2, 9, 5, 2, 9],
+[7, 9, 4, 8, 5, 6, 1, 2, 5, 6, 5, 7, 1, 4, 8, 5, 8, 7, 1, 8, 6, 8, 5, 1, 3, 9, 3, 6, 5, 7, 1, 4, 8, 5, 8], 
+[3, 9, 6, 8, 6, 1, 7, 2, 3, 2, 4, 3, 1, 5, 2, 9, 6, 9, 5, 7, 5, 2, 6, 3, 5, 8, 3, 2, 1, 6, 7, 1, 2, 9, 4], 
+[2, 1, 3, 2, 1, 6, 1, 5, 4, 5, 7, 5, 4, 3, 5, 8, 7, 8, 1, 3, 9, 8, 1, 4, 2, 5, 6, 8, 7, 4, 3, 5, 3, 9, 7], 
+[6, 8, 9, 9, 1, 5, 2, 4, 3, 5, 1, 9, 4, 7, 4, 1, 5, 2, 6, 2, 5, 1, 2, 5, 2, 4, 9, 5, 9, 7, 6, 3, 4, 1, 7], 
+[1, 4, 5, 4, 5, 4, 5, 7, 2, 8, 3, 9, 3, 1, 7, 9, 4, 5, 1, 8, 8, 6, 2, 4, 5, 7, 9, 4, 5, 3, 9, 7, 9, 2, 8], 
+[8, 2, 7, 6, 7, 2, 1, 7, 8, 1, 5, 4, 5, 1, 4, 5, 6, 9, 6, 3, 8, 3, 2, 9, 3, 2, 7, 5, 1, 4, 9, 5, 6, 5, 6], 
+[2, 4, 8, 5, 7, 9, 7, 9, 2, 7, 1, 7, 1, 5, 2, 3, 4, 6, 8, 6, 2, 6, 3, 1, 5, 2, 3, 1, 5, 9, 5, 8, 4, 7, 9], 
+[6, 7, 9, 6, 2, 1, 5, 6, 9, 5, 2, 5, 7, 5, 7, 9, 7, 5, 8, 4, 1, 2, 4, 2, 6, 2, 9, 6, 3, 5, 7, 5, 7, 9, 7], 
+[4, 8, 7, 2, 9, 4, 6, 9, 8, 7, 1, 6, 5, 7, 5, 2, 7, 5, 8, 5, 3, 8, 9, 9, 4, 1, 6, 9, 4, 1, 5, 1, 1, 2, 7], 
+[6, 2, 9, 8, 9, 5, 7, 1, 7, 5, 3, 5, 2, 3, 4, 8, 5, 6, 2, 6, 1, 6, 9, 5, 3, 9, 3, 5, 9, 5, 3, 7, 8, 4, 2], 
+[1, 4, 2, 6, 7, 1, 8, 6, 5, 7, 5, 1, 3, 2, 5, 2, 9, 2, 9, 8, 4, 5, 4, 3, 6, 3, 8, 6, 3, 1, 7, 8, 9, 8, 5], 
+[9, 4, 5, 1, 8, 4, 9, 8, 6, 7, 8, 7, 3, 5, 7, 5, 5, 1, 5, 9, 5, 1, 6, 2, 1, 7, 8, 3, 2, 4, 2, 5, 4, 5, 4], 
+[6, 5, 9, 3, 4, 5, 6, 3, 4, 7, 2, 5, 1, 2, 9, 8, 5, 1, 3, 1, 6, 7, 6, 7, 4, 7, 4, 5, 8, 5, 2, 9, 5, 2, 9], 
+[5, 6, 1, 8, 7, 4, 2, 7, 5, 3, 4, 5, 7, 5, 9, 5, 6, 1, 8, 7, 1, 2, 4, 3, 2, 3, 8, 5, 4, 5, 7, 9, 5, 9, 4], 
+[1, 3, 2, 1, 7, 4, 3, 7, 9, 5, 4, 5, 4, 2, 1, 5, 6, 5, 2, 1, 8, 3, 7, 4, 3, 2, 8, 3, 4, 5, 1, 2, 5, 1, 4], 
+[7, 3, 5, 8, 4, 5, 5, 3, 8, 5, 4, 9, 3, 1, 2, 6, 9, 6, 9, 8, 5, 4, 5, 7, 4, 3, 8, 6, 3, 1, 8, 9, 8, 5, 9], 
+[2, 7, 2, 4, 5, 8, 7, 6, 6, 1, 5, 1, 3, 1, 6, 2, 6, 4, 3, 8, 4, 8, 5, 3, 9, 7, 8, 9, 5, 9, 7, 9, 8, 4, 5], 
+[9, 6, 5, 7, 1, 9, 3, 4, 9, 2, 3, 8, 4, 2, 6, 5, 8, 7, 1, 4, 9, 5, 7, 9, 2, 6, 9, 8, 3, 2, 4, 1, 5, 7, 5], 
+[2, 6, 5, 2, 5, 2, 1, 3, 5, 8, 3, 1, 9, 7, 4, 5, 8, 1, 4, 5, 6, 5, 8, 9, 3, 4, 7, 2, 7, 9, 3, 6, 5, 2, 6], 
+[1, 7, 4, 9, 5, 7, 8, 5, 7, 4, 9, 8, 3, 2, 1, 4, 6, 8, 5, 3, 6, 5, 4, 9, 2, 1, 5, 8, 1, 2, 9, 7, 9, 0, 1], 
+[8, 4, 3, 9, 6, 3, 4, 8, 9, 2, 5, 2, 5, 7, 2, 5, 3, 4, 3, 9, 3, 6, 9, 4, 9, 2, 5, 4, 2, 5, 8, 3, 2, 1, 6],
+[2, 3, 8, 7, 4, 7, 5, 4, 8, 6, 9, 5, 9, 8, 1, 2, 5, 1, 3, 8, 3, 1, 7, 6, 3, 6, 2, 6, 5, 4, 8, 5, 5, 8, 5],
+[6, 9, 3, 6, 1, 9, 8, 7, 2, 4, 2, 5, 8, 5, 5, 4, 9, 6, 1, 3, 6, 9, 4, 7, 2, 5, 3, 4, 2, 5, 3, 8, 1, 6, 1],
+[5, 6, 3, 9, 7, 1, 7, 8, 7, 3, 1, 2, 8, 5, 6, 5, 4, 5,8,5,7,1,7,8,7,2,7,6,4,8,5,6,1,4,5],
+[1,2,4,9,4,5,1,8,1,5,7,5,7,3,8,7,5,4,1,4,2,1,5,2,9,6,2,5,7,5,7,6,3,5,3],
+[1,7,1,8,6,4,2,1,5,4,8,4,5,1,5,7,4,3,1,5,1,2,6,3,1,2,9,3,6,5,7,1,5,6,7],
+[5,2,6,7,4,8,6,4,1,8,7,5,8,1,3,5,3,5,3,4,9,3,5,6,2,1,6,1,5,8,6,8,9,5,7],
+[1,3,8,1,6,2,5,9,4,2,6,5,3,5,7,4,7,8,9,7,8,2,1,2,1,5,8,6,3,1,3,6,5,3,4],
+[6,7,2,6,7,2,9,4,6,9,1,5,1,5,1,5,8,3,5,3,4,8,6,8,6,9,4,1,2,5,9,5,9,7,5],
+[3,6,1,2,7,6,3,9,6,8,5,7,6,5,4,8,4,7,9,6,8,9,2,3,5,9,8,3,1,5,3,4,9,8,4],
+[7,7,6,5,3,8,3,4,6,3,7,2,9,4,9,5,2,3,4,9,5,3,5,8,3,4,1,3,2,4,1,4,9,5,8],
+[3,1,2,6,5,4,7,1,7,2,6,7,8,3,9,5,6,5,7,9,4,9,7,8,3,1,3,2,5,7,8,5,4,5,6],
+[4,2,3,9,8,6,9,4,7,3,5,6,5,4,7,8,5,9,6,1,7,8,1,5,4,7,2,7,8,6,5,4,2,1,8],
+[1,2,3,9,1,7,5,2,7,6,5,6,7,2,4,9,4,5,9,3,1,5,9,5,8,3,2,7,5,2,4,7,6,9,5],
+[2,9,6,1,6,9,5,3,5,3,4,6,5,8,3,6,1,8,6,9,8,7,4,1,4,3,5,8,7,6,9,8,7,2,9],
+[4,5,4,1,2,4,6,1,6,3,2,9,5,3,5,2,5,7,8,4,3,2,9,6,7,1,8,7,5,1,5,3,8,5,4],
+[9,5,9,7,9,6,7,6,7,2,3,4,2,5,2,2,9,5,9,5,1,7,1,7,6,8,3,7,4,2,4,2,5,9,2],
+[9,5,7,8,9,7,1,8,5,4,2,6,5,6,3,9,6,3,7,9,7,1,2,5,2,5,9,4,5,6,5,7,9,3,4],
+[1,3,1,2,8,9,7,8,4,5,6,8,5,5,4,5,1,5,2,3,9,2,9,2,3,6,7,4,5,4,5,6,5,9,8]];
+
 let hintsList = [];
 let hintsUsed = 0;
 const maxHints = 5;
@@ -30,42 +71,6 @@ function parseAndUpdateLoadLocation() {
     return { currentRow, currentCol, newLoadLocation };
 }
 
-// Function to generate random numbers
-function generateRandomNumbers(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
-// Function to populate the table with random numbers
-function populateTableWithRandomNumbers(tableID, min, max) {
-    let tableRef = document.getElementById(tableID);
-    let cellCount = 0;
-
-    // global loadLocation variable
-    loadLocation = "0-0"; 
-
-    for (let row = 0; row < tableRef.rows.length; row++) {
-        for (let col = 0; col < tableRef.rows[row].cells.length; col++) {
-            if (cellCount >= 26) {
-                console.log("Final loadLocation after populating table:", loadLocation);
-                return;
-            }
-
-            const { currentRow, currentCol, newLoadLocation } = parseAndUpdateLoadLocation(loadLocation);
-
-            let cell = tableRef.rows[currentRow].cells[currentCol];
-
-            cell.innerHTML = generateRandomNumbers(1,9);
-            cellCount++;
-
-            loadLocation = newLoadLocation;
-
-            console.log(`Populated cell ${currentRow}-${currentCol}. Next loadLocation: ${loadLocation}`);
-        }
-    }
-
-    console.log("Final loadLocation after populating table:", loadLocation);
-}
-
 // Function to initialize the game
 function newGameLoading() {
     // Reset variables
@@ -76,6 +81,9 @@ function newGameLoading() {
     currentHintIndex = 0;
     hintsUsed = 0;
 
+    // Randomly select one set of numbers from difficulty1
+    const randomIndex = Math.floor(Math.random() * difficulty1.length);
+    intialNumbers = difficulty1[randomIndex].slice(); // copy to avoid mutation
 
     const table = document.getElementById("new-table");
     table.innerHTML = ""; 
@@ -87,19 +95,17 @@ function newGameLoading() {
     document.getElementById("score").innerHTML = moveScore;
     document.getElementById("hintsLeft").innerText = `Hints Left: ${maxHints}`;
 
-    // Populate the table with initial numbers
+    // Populate the table with initial numbers from the chosen set
     for (let i = 0; i < intialNumbers.length; i++) {
         const { currentRow, currentCol, newLoadLocation } = parseAndUpdateLoadLocation(loadLocation);
-
         document.getElementById(loadLocation).innerHTML = intialNumbers[i];
-
         loadLocation = newLoadLocation;
     }
 
     const card = document.getElementById("resultCard");
     card.classList.add("hidden");
 
-    console.log("Game restarted — updated loadLocation:", loadLocation);
+    console.log(`New game started with set ${randomIndex}. LoadLocation now: ${loadLocation}`);
 }
 
 // Function to fetch leaderboard data and update the table
@@ -225,8 +231,6 @@ function createTable(tableID) {
         newCell.appendChild(newText);
       }
     }
-  
-    populateTableWithRandomNumbers(tableID, 1, 9);
 
     for (let row = 0; row < 4; row++) {
       for (let col = 0; col < 9; col++) {
@@ -939,7 +943,7 @@ function handleDifficultyChange(level) {
     console.log("Difficulty set to:", level);
 }
 
-const bgMusic = new Audio('/Users/shahadaljneibi/Desktop/NumberMatch-3/frontend/assets/puzzle-game-loop-bright-casual-video-game-music-249201.mp3');
+const bgMusic = new Audio('NumberMatch/frontend/assets/puzzle-game-loop-bright-casual-video-game-music-249201.mp3');
 bgMusic.loop = true;
 bgMusic.volume = 0.3; 
 let isMusicPlaying = false;
