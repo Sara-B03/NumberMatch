@@ -54,7 +54,7 @@ function populateTableWithRandomNumbers(tableID, min, max) {
 
             let cell = tableRef.rows[currentRow].cells[currentCol];
 
-            cell.innerHTML = 1;
+            cell.innerHTML = generateRandomNumbers(1,9);
             cellCount++;
 
             loadLocation = newLoadLocation;
@@ -76,6 +76,7 @@ function newGameLoading() {
     currentHintIndex = 0;
     hintsUsed = 0;
 
+
     const table = document.getElementById("new-table");
     table.innerHTML = ""; 
 
@@ -90,14 +91,11 @@ function newGameLoading() {
     for (let i = 0; i < intialNumbers.length; i++) {
         const { currentRow, currentCol, newLoadLocation } = parseAndUpdateLoadLocation(loadLocation);
 
-        // Update cell content
         document.getElementById(loadLocation).innerHTML = intialNumbers[i];
 
-        // Update loadLocation for next round
         loadLocation = newLoadLocation;
     }
 
-    // Hide result card
     const card = document.getElementById("resultCard");
     card.classList.add("hidden");
 
@@ -208,8 +206,6 @@ function cellClicked(cellID) {
         }, 50);
     }
 }
-
-  
 
 function createTable(tableID) {
     let tableRef = document.getElementById(tableID);
@@ -403,8 +399,13 @@ function remainingNumbers() {
 // Function to copy remaining numbers onto the table
 function copyNumbers() {
     if (copiesLeft > 0) {
-      let remainingNumberList = remainingNumbers();
-      console.log("Remaining numbers:", remainingNumberList);
+        const copyPlus = document.getElementById("copyPlus");
+        if (copyPlus) {
+            copyPlus.style.display = "none";
+        }
+
+        let remainingNumberList = remainingNumbers();
+        console.log("Remaining numbers:", remainingNumberList);
   
       let tableRef = document.getElementById("new-table");
       let hiddenRows = Array.from(tableRef.querySelectorAll(".hidden-row"));
@@ -492,8 +493,10 @@ function copyNumbers() {
       console.log("Updated loadLocation:", loadLocation);
   
       copiesLeft--;
+      
       document.getElementById("copiesLeft").innerHTML = "Copies Left: " + copiesLeft;
-  
+      console.log("copiesLeft:", copiesLeft, "hintsUsed:", hintsUsed);
+
       const copyBtn = document.getElementById("copiesLeft");
       copyBtn.classList.add("clicked");
       setTimeout(() => copyBtn.classList.remove("clicked"), 150);
@@ -653,7 +656,9 @@ function isNumbersTwoAdjacentLevels(cellOne, cellTwo, hint) {
 
 // Function to calculate the score and up to existing score
 function updateScore(cellOne, cellTwo) {
-    let currentScore = parseInt(document.getElementById("score").innerText);
+    let scoreBtn = document.getElementById("score");
+    let currentScore = parseInt(scoreBtn.innerText.match(/\d+/)?.[0]) || 0;
+    
 
     let basePoints = 0;
 
@@ -666,12 +671,15 @@ function updateScore(cellOne, cellTwo) {
     }
 
     const distance = calculateDistance(cellOne, cellTwo);
-
     const pointsEarned = basePoints * distance;
-
     currentScore += pointsEarned;
 
-    document.getElementById("score").innerText = currentScore;
+    scoreBtn.innerText = " " + currentScore;
+    scoreBtn.classList.add("score-animated");
+
+    setTimeout(() => {
+        scoreBtn.classList.remove("score-animated");
+    }, 400);
 
     console.log(`Match type score: ${basePoints}, distance: ${distance}`);
     console.log(`Total points earned: ${pointsEarned}`);
@@ -839,10 +847,20 @@ function showHints() {
     if (copiesLeft === 0 && getAllHints().length === 0) {
         showResultCard("😢 Game Over", "No possible moves and no copies left!", false);
     } else {
-        window.alert("No possible plays available!");
-    }
+        
+        const copyPlus = document.getElementById("copyPlus");
+        const copyBtn = document.getElementById("copiesLeft");
     
-}
+        if (copyPlus && copiesLeft > 0) {
+            copyPlus.style.display = "inline-block";
+        }
+        
+        if (copyBtn) {
+            copyBtn.classList.add("pulse-scale");
+            setTimeout(() => copyBtn.classList.remove("pulse-scale"), 1000);
+        }
+    }     
+}    
 
 // Function to show the results to player (win/loss)
 function showResultCard(title, message, celebrate = false) {
@@ -926,6 +944,8 @@ bgMusic.loop = true;
 bgMusic.volume = 0.3; 
 let isMusicPlaying = false;
 
+let soundEnabled = false;
+
 // Function to handle the sound  
 function handleSoundToggle(isOn) {
   soundEnabled = isOn;
@@ -942,14 +962,6 @@ function handleSoundToggle(isOn) {
     isMusicPlaying = false;
   }
 }
-
-// Start music on first user interaction (browser autoplay fix)
-window.addEventListener("click", () => {
-  if (soundEnabled && !isMusicPlaying) {
-    bgMusic.play();
-    isMusicPlaying = true;
-  }
-}, { once: true });
 
 
 let isDarkMode = false;
