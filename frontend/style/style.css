@@ -80,7 +80,7 @@ h1 {
 #new-table {
     color: #151a2e;
     cursor: pointer;
-    padding: 7px;
+    padding: 5px;
     border-collapse: collapse;
     border-radius: 10px;
     margin: 20px auto; 
@@ -100,7 +100,6 @@ h1 {
   text-align: center;
   font-size: 2.5em;
   cursor: pointer;
-  background: var(--cell-bg);
   border: 1px solid rgb(241, 241, 241); 
   border-radius: 5px; 
 }
@@ -220,7 +219,7 @@ h1 {
   }
   
   .match-success {
-    animation: pulse 0.4s ease;
+    animation: pulse 0.3s ease;
   }
   
   .match-fail {
@@ -247,11 +246,11 @@ h1 {
     display: inline-block;
     background: #4a90e2;
     color: #fff;
-    font-size: 14px;
+    font-size: 16px;
     font-weight: bold;
     border: none;
     border-radius: 12px;
-    padding: 10px 16px;
+    padding: 10px 11px;
     cursor: pointer;
     font-weight: bold;
     display: flex;
@@ -295,9 +294,6 @@ button {
     50% { transform: scale(1.1); }
     100% { transform: scale(1); }
   }
-  
-
-  
   
   #score {
     color: #4a90e2;
@@ -479,9 +475,8 @@ button {
 
   .settings-btn {
     position: absolute;
-    top: 10px;
     right: 20px;
-    background: #4a90e2;
+    background: #55a0f5;
     color: #fff;
     border: none;
     border-radius: 12px;
@@ -495,9 +490,8 @@ button {
 
   .leaderboard-btn {
     position: absolute;
-    top: 10px;
     left: 20px;
-    background: #4a90e2;
+    background: #55a0f5;
     color: #fff;
     border: none;
     border-radius: 12px;
@@ -1048,6 +1042,91 @@ body.dark-mode .card-content > button:not(#scoreSubmission button):hover {
 .hidden {
   display: none;
 }
+@media (max-width: 768px) {
+  h1 {
+    font-size: 2rem;
+  }
 
+  .container {
+    padding: 10px;
+    gap: 15px;
+  }
 
+  #new-table td {
+    width: 50px;
+    height: 50px;
+    font-size: 1.4em;
+  }
 
+  #score {
+    font-size: 18px;
+    padding: 8px 12px;
+  }
+
+  #copiesLeft, #hint {
+    font-size: 14px;
+    padding: 8px 10px;
+    gap: 6px;
+  }
+
+  #game-info {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .top-bar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .settings-container,
+  .leaderboard-container,
+  .tutorial-modal {
+    width: 95vw;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 15px;
+  }
+
+  .settings-card,
+  .card,
+  .leaderboard-card {
+    font-size: 0.9rem;
+  }
+
+  .tutorial-content p {
+    font-size: 0.9rem;
+  }
+
+  .tutorial-content h2 {
+    font-size: 1.4rem;
+  }
+
+  button {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  #new-table td {
+    width: 40px;
+    height: 40px;
+    font-size: 1.1em;
+  }
+
+  h1 {
+    font-size: 1.6rem;
+  }
+
+  #copiesLeft span,
+  #hint span {
+    font-size: 14px;
+  }
+
+  .switch .slider-switch {
+    width: 30px;
+    height: 16px;
+  }
+}

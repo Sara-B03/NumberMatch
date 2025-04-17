@@ -23,7 +23,7 @@ let difficulty1 = [[6, 5, 9, 3, 4, 5, 6, 3, 4, 7, 2, 5, 1, 2, 9, 8, 5, 1, 3, 1, 
 [2, 7, 2, 4, 5, 8, 7, 6, 6, 1, 5, 1, 3, 1, 6, 2, 6, 4, 3, 8, 4, 8, 5, 3, 9, 7, 8, 9, 5, 9, 7, 9, 8, 4, 5], 
 [9, 6, 5, 7, 1, 9, 3, 4, 9, 2, 3, 8, 4, 2, 6, 5, 8, 7, 1, 4, 9, 5, 7, 9, 2, 6, 9, 8, 3, 2, 4, 1, 5, 7, 5], 
 [2, 6, 5, 2, 5, 2, 1, 3, 5, 8, 3, 1, 9, 7, 4, 5, 8, 1, 4, 5, 6, 5, 8, 9, 3, 4, 7, 2, 7, 9, 3, 6, 5, 2, 6], 
-[1, 7, 4, 9, 5, 7, 8, 5, 7, 4, 9, 8, 3, 2, 1, 4, 6, 8, 5, 3, 6, 5, 4, 9, 2, 1, 5, 8, 1, 2, 9, 7, 9, 0, 1], 
+[1, 7, 4, 9, 5, 7, 8, 5, 7, 4, 9, 8, 3, 2, 1, 4, 6, 8, 5, 3, 6, 5, 4, 9, 2, 1, 5, 8, 1, 2, 9, 7, 9, 5, 1], 
 [8, 4, 3, 9, 6, 3, 4, 8, 9, 2, 5, 2, 5, 7, 2, 5, 3, 4, 3, 9, 3, 6, 9, 4, 9, 2, 5, 4, 2, 5, 8, 3, 2, 1, 6],
 [2, 3, 8, 7, 4, 7, 5, 4, 8, 6, 9, 5, 9, 8, 1, 2, 5, 1, 3, 8, 3, 1, 7, 6, 3, 6, 2, 6, 5, 4, 8, 5, 5, 8, 5],
 [6, 9, 3, 6, 1, 9, 8, 7, 2, 4, 2, 5, 8, 5, 5, 4, 9, 6, 1, 3, 6, 9, 4, 7, 2, 5, 3, 4, 2, 5, 3, 8, 1, 6, 1],
@@ -82,7 +82,7 @@ function newGameLoading() {
 
     // Randomly select one set of numbers from difficulty1
     const randomIndex = Math.floor(Math.random() * difficulty1.length);
-    intialNumbers = difficulty1[randomIndex].slice(); // copy to avoid mutation
+    intialNumbers = difficulty1[randomIndex].slice(); 
 
     const table = document.getElementById("new-table");
     table.innerHTML = ""; 
@@ -90,7 +90,7 @@ function newGameLoading() {
     // Recreate the table
     createTable("new-table");
 
-    document.getElementById("copiesLeft").innerHTML = "Copies Left: " + copiesLeft;
+    document.getElementById("copiesLeft").innerHTML = `<span class="material-symbols-rounded">content_copy</span> ${copiesLeft}`;
     document.getElementById("score").innerHTML = moveScore;
     document.getElementById("hintsLeft").innerText = `${maxHints}`;
 
@@ -105,6 +105,7 @@ function newGameLoading() {
     card.classList.add("hidden");
 
     console.log(`New game started with set ${randomIndex}. LoadLocation now: ${loadLocation}`);
+
 }
 
 // Function to fetch leaderboard data and update the table
@@ -178,9 +179,14 @@ let secondClickCell = "";
 let firstCell = null;
 let secondCell = null;
 
+
 // Function to handle cell clicks
 function cellClicked(cellID) {
     const cell = document.getElementById(cellID);
+
+    if (soundEnabled) {
+        clickSound.play();
+    }
 
     if (cellID === firstCell) {
         cell.classList.remove("selected");
@@ -218,7 +224,7 @@ function createTable(tableID) {
     for (let row = 0; row < 128; row++) {
       let newRow = tableRef.insertRow(-1);
   
-      if (row >= 4) {
+      if (row >= 5) {
         newRow.classList.add("hidden-row");
       }
   
@@ -280,8 +286,12 @@ function checkMatch(firstCell, secondCell, hint = false) {
     let cellTwoNumber = parseInt(cellTwo.innerText);
 
     if (cellOneNumber === cellTwoNumber) {
-        if (!hint) {
-            console.log("Match found! Numbers are the same.");
+if (!hint) {
+    if (soundEnabled) {
+        matchSound.play(); 
+    }
+
+    console.log("Match found! Numbers are the same.");
 
             cellOne.classList.add("match-success");
             cellTwo.classList.add("match-success");
@@ -305,7 +315,7 @@ function checkMatch(firstCell, secondCell, hint = false) {
                     (firstCell === currentHint[1] && secondCell === currentHint[0])
                 )) {
                     hintsUsed++;
-                    document.getElementById("hintsLeft").innerText = `Hints Left: ${maxHints - hintsUsed}`;
+                    document.getElementById("hintsLeft").innerText = `${maxHints - hintsUsed}`;
                     currentHint = null;
                 }
 
@@ -322,45 +332,51 @@ function checkMatch(firstCell, secondCell, hint = false) {
         return true;
     } else if (cellOneNumber + cellTwoNumber === 10) {
         console.log("Match found! Numbers add up to 10.");
-
+    
         if (!hint) {
+            if (soundEnabled) {
+                matchSound.pause();
+                matchSound.currentTime = 0;
+                matchSound.play(); 
+            }
+    
             cellOne.classList.add("match-success");
             cellTwo.classList.add("match-success");
-
+    
             setTimeout(() => {
                 cellOne.innerText = "";
                 cellTwo.innerText = "";
-
+    
                 updateScore(firstCell, secondCell);
-
+    
                 const firstCellRow = parseInt(firstCell.split("-")[0]);
                 const secondCellRow = parseInt(secondCell.split("-")[0]);
-
+    
                 if (isRowCleared(firstCellRow)) shiftRowsUp(firstCellRow);
                 if (firstCellRow !== secondCellRow && isRowCleared(secondCellRow)) shiftRowsUp(secondCellRow);
-
+    
                 parseAndUpdateLoadLocation();
-
+    
                 if (currentHint && (
                     (firstCell === currentHint[0] && secondCell === currentHint[1]) ||
                     (firstCell === currentHint[1] && secondCell === currentHint[0])
                 )) {
                     hintsUsed++;
-                    document.getElementById("hintsLeft").innerText = `Hints Left: ${maxHints - hintsUsed}`;
+                    document.getElementById("hintsLeft").innerText = `${maxHints - hintsUsed}`;
                     currentHint = null;
                 }
-
+    
                 cellOne.classList.remove("match-success", "selected");
                 cellTwo.classList.remove("match-success", "selected");
-
+    
                 cellOne.style.backgroundColor = "";
                 cellTwo.style.backgroundColor = "";
-                
-
+    
                 checkGameStatus();
             }, 500);
         }
         return true;
+    
     } else {
         console.log("No match. Numbers do not add up to 10 or are not the same.");
 
@@ -497,7 +513,7 @@ function copyNumbers() {
   
       copiesLeft--;
       
-      document.getElementById("copiesLeft").innerHTML = "Copies Left: " + copiesLeft;
+      document.getElementById("copiesLeft").innerHTML =`<span class="material-symbols-rounded">content_copy</span>${copiesLeft}`;
       console.log("copiesLeft:", copiesLeft, "hintsUsed:", hintsUsed);
 
       const copyBtn = document.getElementById("copiesLeft");
@@ -907,11 +923,15 @@ function checkGameStatus() {
     const hints = getAllHints();
 
     if (remaining.length === 0) {
+        if (soundEnabled) {
+            winSound.play();
+        }
         showResultCard("🎉 You Won!", "You cleared the board!", true);
         return "won";
     }
 
     if (copiesLeft <= 0 && hints.length === 0) {
+
         showResultCard("😢 Game Over", "No more copies or possible matches!", false);
         return "lost";
     }
@@ -942,30 +962,25 @@ function handleDifficultyChange(level) {
     console.log("Difficulty set to:", level);
 }
 
-const bgMusic = new Audio('NumberMatch/frontend/assets/puzzle-game-loop-bright-casual-video-game-music-249201.mp3');
-bgMusic.loop = true;
-bgMusic.volume = 0.3; 
-let isMusicPlaying = false;
+let soundEnabled = false; 
 
-let soundEnabled = false;
+// Sound effects
+const clickSound = new Audio('/Users/shahadaljneibi/Desktop/NumberMatch/frontend/assets/cellClick.mp3');
+clickSound.volume = 0.02;
 
-// Function to handle the sound  
+const matchSound = new Audio('/Users/shahadaljneibi/Desktop/NumberMatch/frontend/assets/checkMatch.mp3');
+matchSound.volume = 0.03;
+
+const winSound = new Audio('/Users/shahadaljneibi/Desktop/NumberMatch/frontend/assets/win.mp3');
+winSound.volume = 0.03;
+
+// Function to handle the sound toggle
 function handleSoundToggle(isOn) {
-  soundEnabled = isOn;
-  localStorage.setItem("sound", isOn);
-  console.log("Sound is", isOn ? "on" : "off");
-
-  if (isOn) {
-    if (!isMusicPlaying) {
-      bgMusic.play();
-      isMusicPlaying = true;
-    }
-  } else {
-    bgMusic.pause();
-    isMusicPlaying = false;
+    soundEnabled = isOn;
+    localStorage.setItem("sound", isOn);
+    console.log("Sound is", isOn ? "on" : "off");
   }
-}
-
+  
 
 let isDarkMode = false;
 
