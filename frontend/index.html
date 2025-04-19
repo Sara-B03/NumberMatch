@@ -86,16 +86,87 @@
   </div>
 </div>
 
-  <div id="tutorialModal" class="tutorial-modal hidden">
-    <div class="tutorial-content">
-      <h2>Welcome to Number Match!</h2>
-      <p>🧠 Match numbers that are the same or add up to 10.</p>
-      <p>📏 They must be in the same row, column, diagonal, or adjacent level.</p>
-      <p>💡 Use hints to find a possible move. You have 5 copies to reuse remaining numbers.</p>
-      <p>🎯 Clear the board to win!</p>
-      <button onclick="closeTutorial()">Got it!</button>
+<div id="tutorialModal" class="tutorial-modal">
+  <div class="tutorial-content">
+    <!-- Slide container -->
+    <div class="tutorial-slides">
+
+      <div class="mySlide fade">
+        <div class="numbertext">1 / 6</div>
+        <video width="320" height="240" autoplay muted playsinline>
+          <source src="img/findpairs.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+        </video>
+        <div class="text">🧠 Find pairs of numbers that are equal or add up to 10. Tap them!</div>
+      </div>
+
+      <div class="mySlide fade">
+        <div class="numbertext">2 / 6</div>
+        <video width="320" height="240" autoplay muted playsinline>
+          <source src="img/verti-hori-diag.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+        </video>
+        <div class="text">📏 Pairs can be matched horizontally, vertically, or diagonally.</div>
+      </div>
+
+      <div class="mySlide fade">
+        <div class="numbertext">3 / 6</div>
+        <video width="320" height="240" autoplay muted playsinline>
+          <source src="img/adjacent.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+        </video>
+        <div class="text">🔁 Check end of one line and beginning of the next – matches can wrap!</div>
+      </div>
+
+      <div class="mySlide fade">
+        <div class="numbertext">4 / 6</div>
+        <video width="320" height="240" autoplay muted playsinline>
+          <source src="img/usecopy.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+        </video>
+        <div class="text">📄 Use Copies if no matches are left. It reuses remaining numbers.</div>
+      </div>
+
+      <div class="mySlide fade">
+        <div class="numbertext">5 / 6</div>
+        <video width="320" height="240" autoplay muted playsinline>
+          <source src="img/usehints.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+        </video>
+        <div class="text">💡 Use Hints when you're stuck. You have 5 total!</div>
+      </div>
+
+      <div class="mySlide fade">
+        <div class="numbertext">6 / 6</div>
+        <video width="320" height="240" autoplay muted playsinline>
+          <source src="img/findpairs.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+        </video>
+        <div class="text">🎯 Clear the board to progress and earn more points!</div>
+      </div>
+
+    </div>
+
+    <!-- Controls -->
+    <a class="prev" onclick="plusSlides(-1)">❮</a>
+    <a class="next" onclick="plusSlides(1)">❯</a>
+
+    <!-- Dots -->
+    <div style="text-align:center; margin-top: 10px;">
+      <span class="dot" onclick="currentSlide(1)"></span>
+      <span class="dot" onclick="currentSlide(2)"></span>
+      <span class="dot" onclick="currentSlide(3)"></span>
+      <span class="dot" onclick="currentSlide(4)"></span>
+      <span class="dot" onclick="currentSlide(5)"></span>
+      <span class="dot" onclick="currentSlide(6)"></span>
+    </div>
+
+    <div style="text-align:center; margin-top: 20px;">
+      <button onclick="closeTutorial()">Skip Tutorial</button>
     </div>
   </div>
+</div>
+
 
     <!-- Game Info Section -->
     <div id="game-info">
