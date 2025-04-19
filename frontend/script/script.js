@@ -966,13 +966,13 @@ function handleDifficultyChange(level) {
 let soundEnabled = false; 
 
 // Sound effects
-const clickSound = new Audio('/Users/shahadaljneibi/Desktop/NumberMatch/frontend/assets/cellClick.mp3');
+const clickSound = new Audio('https://github.com/Sara-B03/NumberMatch/blob/main/frontend/assets/cellClick.mp3');
 clickSound.volume = 0.02;
 
-const matchSound = new Audio('/Users/shahadaljneibi/Desktop/NumberMatch/frontend/assets/checkMatch.mp3');
+const matchSound = new Audio('https://github.com/Sara-B03/NumberMatch/blob/main/frontend/assets/checkMatch.mp3');
 matchSound.volume = 0.03;
 
-const winSound = new Audio('/Users/shahadaljneibi/Desktop/NumberMatch/frontend/assets/win.mp3');
+const winSound = new Audio('https://github.com/Sara-B03/NumberMatch/blob/main/frontend/assets/win.mp3');
 winSound.volume = 0.03;
 
 // Function to handle the sound toggle
