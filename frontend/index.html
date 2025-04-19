@@ -6,7 +6,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded" rel="stylesheet" />
 
-  <link rel="stylesheet" type="text/css" href="style/style.css" />
+  <link rel="stylesheet" type="text/css" href="style/style.css"/>
   <title>Number Match Game</title>
 </head>
 
@@ -63,6 +63,12 @@
       </label>
     </label>
   </div>  
+
+
+  <div class="card">
+    <h3>Toturial</h3>
+      <button class="tutorial-btn" onclick="showTutorialModal()">Review Tutorial</button>
+  </div>  
 </div>
 
 <!---------- Leader Board ---------->
@@ -86,73 +92,62 @@
   </div>
 </div>
 
-<div id="tutorialModal" class="tutorial-modal">
+<div id="tutorialModal" class="tutorial-modal hidden">
   <div class="tutorial-content">
-    <!-- Slide container -->
-    <div class="tutorial-slides">
-
+    <button class="close-btn" onclick="closeTutorial()">✖</button>
+    <div class="slideshow-container">
+      <!-- Slide 1 -->
       <div class="mySlide fade">
         <div class="numbertext">1 / 6</div>
-        <video width="320" height="240" autoplay muted controls>
-          <source src="https://raw.githubusercontent.com/Sara-B03/NumberMatch/main/frontend/img/findpairs.mp4" type="video/mp4">
-        Your browser does not support the video tag.
-        </video>
+        <img src="img/findpairs.png" alt="Game Logo">
+        <img src="img/findpairs1.png" alt="Game Logo">
         <div class="text">🧠 Find pairs of numbers that are equal or add up to 10. Tap them!</div>
       </div>
 
+      <!-- Slide 2 -->
       <div class="mySlide fade">
         <div class="numbertext">2 / 6</div>
-        <video width="320" height="240" autoplay muted controls>
-          <source src="https://raw.githubusercontent.com/Sara-B03/NumberMatch/main/frontend/img/verti-hori-diag.mp4" type="video/mp4">
-        Your browser does not support the video tag.
-        </video>
+        <img src="img/vertical.png" alt="Game Logo">
+        <img src="img/horizontal.png" alt="Game Logo">
+        <img src="img/diagonal.png" alt="Game Logo">
         <div class="text">📏 Pairs can be matched horizontally, vertically, or diagonally.</div>
       </div>
 
+      <!-- Slide 3 -->
       <div class="mySlide fade">
         <div class="numbertext">3 / 6</div>
-        <video width="320" height="240" autoplay muted controls>
-          <source src="https://raw.githubusercontent.com/Sara-B03/NumberMatch/main/frontend/img/adjacent.mp4" type="video/mp4">
-        Your browser does not support the video tag.
-        </video>
+        <img src="img/adjacent.png" alt="Game Logo">
         <div class="text">🔁 Check end of one line and beginning of the next – matches can wrap!</div>
       </div>
 
+      <!-- Slide 4 -->
       <div class="mySlide fade">
         <div class="numbertext">4 / 6</div>
-        <video width="320" height="240" autoplay muted controls>
-          <source src="https://raw.githubusercontent.com/Sara-B03/NumberMatch/main/frontend/img/usecopy.mp4" type="video/mp4">
-        Your browser does not support the video tag.
-        </video>
+        <img src="img/usecopy.png" alt="Game Logo">
         <div class="text">📄 Use Copies if no matches are left. It reuses remaining numbers.</div>
       </div>
 
+      <!-- Slide 5 -->
       <div class="mySlide fade">
         <div class="numbertext">5 / 6</div>
-        <video width="320" height="240" autoplay muted controls>
-          <source src="https://raw.githubusercontent.com/Sara-B03/NumberMatch/main/frontend/img/usehints.mp4" type="video/mp4">
-        Your browser does not support the video tag.
-        </video>
+        <img src="img/usehints.png" alt="Game Logo">
         <div class="text">💡 Use Hints when you're stuck. You have 5 total!</div>
       </div>
 
+      <!-- Slide 6 -->
       <div class="mySlide fade">
         <div class="numbertext">6 / 6</div>
-        <video width="320" height="240" autoplay muted controls>
-          <source src="https://raw.githubusercontent.com/Sara-B03/NumberMatch/main/frontend/img/findpairs.mp4" type="video/mp4">
-        Your browser does not support the video tag.
-        </video>
+        <img src="img/findpairs1.png" alt="Game Logo">
         <div class="text">🎯 Clear the board to progress and earn more points!</div>
       </div>
 
+      <!-- Navigation arrows -->
+      <a class="prev" onclick="plusSlides(-1)">❮</a>
+      <a class="next" onclick="plusSlides(1)">❯</a>
     </div>
 
-    <!-- Controls -->
-    <a class="prev" onclick="plusSlides(-1)">❮</a>
-    <a class="next" onclick="plusSlides(1)">❯</a>
-
-    <!-- Dots -->
-    <div style="text-align:center; margin-top: 10px;">
+    <!-- Dots navigation -->
+    <div class="dots-container">
       <span class="dot" onclick="currentSlide(1)"></span>
       <span class="dot" onclick="currentSlide(2)"></span>
       <span class="dot" onclick="currentSlide(3)"></span>
@@ -162,7 +157,7 @@
     </div>
 
     <div style="text-align:center; margin-top: 20px;">
-      <button onclick="closeTutorial()">Skip Tutorial</button>
+      <button class="skip-btn" onclick="closeTutorial()">Skip Tutorial</button>
     </div>
   </div>
 </div>

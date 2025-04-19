@@ -1,5 +1,6 @@
 console.log("Script loaded!");
 
+let slideIndex = 1;
 let loadLocation = "0-0";
 let copiesLeft = 5;
 let moveScore = 0;
@@ -996,66 +997,92 @@ function toggleTheme() {
 
 document.getElementById("toggleThemeBtn").addEventListener("click", toggleTheme);
 
-
 // Load saved settings on page load
 window.onload = () => {
     const difficulty = localStorage.getItem("difficulty");
     const sound = localStorage.getItem("sound") === "true";
     const theme = localStorage.getItem("theme");
-  
+    
     if (difficulty) document.getElementById("difficultySlider").value = difficulty;
     document.getElementById("soundToggle").checked = sound;
     soundEnabled = sound;
     document.getElementById("themeToggle").checked = (theme === "dark");
     
     if (sound) {
-        console.log("Sound enabled, will auto-play on click.");
-      }
+      console.log("Sound enabled, will auto-play on click.");
+    }
     
-  
     if (theme === "dark") document.body.classList.add("dark-mode");
-
+  
     const tutorialShown = localStorage.getItem("tutorialShown");
-    if (!tutorialShown) { showTutorialModal(); }
+    if (!tutorialShown) { 
+        // Add a small delay to ensure DOM is fully ready
+        setTimeout(showTutorialModal, 300);
+    }
   };
 
-function showTutorialModal() {
-    document.getElementById("tutorialModal").classList.remove("hidden");
-}
-
-function closeTutorial() {
-    document.getElementById("tutorialModal").classList.add("hidden");
-    localStorage.setItem("tutorialShown", "true");
-}
-
-let slideIndex = 1;
-showSlides(slideIndex);
-
-// Next/previous controls
-function plusSlides(n) {
-  showSlides(slideIndex += n);
-}
-
-// Thumbnail image controls
-function currentSlide(n) {
-  showSlides(slideIndex = n);
-}
 
 function showSlides(n) {
   let i;
   let slides = document.getElementsByClassName("mySlide");
   let dots = document.getElementsByClassName("dot");
+  
   if (n > slides.length) {slideIndex = 1}
   if (n < 1) {slideIndex = slides.length}
+  
   for (i = 0; i < slides.length; i++) {
     slides[i].style.display = "none";
   }
+  
   for (i = 0; i < dots.length; i++) {
     dots[i].className = dots[i].className.replace(" active", "");
   }
+  
   slides[slideIndex-1].style.display = "block";
   dots[slideIndex-1].className += " active";
 }
 
+function plusSlides(n) {
+  showSlides(slideIndex += n);
+}
 
+function currentSlide(n) {
+  showSlides(slideIndex = n);
+}
 
+function showTutorialModal() {
+    const modal = document.getElementById("tutorialModal");
+    modal.classList.remove("hidden"); // Remove hidden class
+    modal.classList.add("show"); // Add show class
+    document.body.style.overflow = "hidden";
+    showSlides(slideIndex);
+}
+
+function closeTutorial() {
+    const modal = document.getElementById("tutorialModal");
+    modal.classList.remove("show");
+    localStorage.setItem("tutorialShown", "true");
+    document.body.style.overflow = "auto";
+    slideIndex = 1;
+    showSlides(slideIndex);
+    
+    // Optional: Add hidden class back after animation
+    setTimeout(() => {
+        modal.classList.add("hidden");
+    }, 300);
+}
+
+// Add event listeners for the buttons
+document.addEventListener('DOMContentLoaded', function() {
+    // Close button (✖)
+    const closeBtn = document.querySelector('.tutorial-modal .close-btn');
+    if (closeBtn) {
+      closeBtn.addEventListener('click', closeTutorial);
+    }
+  
+    // Skip Tutorial button
+    const skipBtn = document.querySelector('.tutorial-modal button[onclick="closeTutorial()"]');
+    if (skipBtn) {
+      skipBtn.addEventListener('click', closeTutorial);
+    }
+  });
