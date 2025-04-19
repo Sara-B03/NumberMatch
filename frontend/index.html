@@ -21,6 +21,7 @@
     <div class="top-bar">
       <button class="settings-btn" onclick="toggleSettings()">⚙️ Settings</button>
       <button class="leaderboard-btn" onclick="toggleLeaderboard()">🏆 Leader Board</button>
+      <button class="tutorial-btn" onclick="showTutorialModal()">📚 Tutorial</button>
     </div>
 
 <!---------- Settings ---------->
@@ -62,13 +63,7 @@
         <span class="slider-switch"></span>
       </label>
     </label>
-  </div>  
-
-
-  <div class="card">
-    <h3>Toturial</h3>
-      <button class="tutorial-btn" onclick="showTutorialModal()">Review Tutorial</button>
-  </div>  
+  </div>   
 </div>
 
 <!---------- Leader Board ---------->
@@ -92,7 +87,7 @@
   </div>
 </div>
 
-<div id="tutorialModal" class="tutorial-modal">
+<div id="tutorialModal" class="tutorial-modal hidden">
   <div class="tutorial-content">
     <button class="close-btn" onclick="closeTutorial()">✖</button>
     <div class="slideshow-container">

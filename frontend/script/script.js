@@ -1014,10 +1014,14 @@ window.onload = () => {
     
     if (theme === "dark") document.body.classList.add("dark-mode");
   
+    // Check if tutorial has been shown before
     const tutorialShown = localStorage.getItem("tutorialShown");
-    if (!tutorialShown) { 
-        // Add a small delay to ensure DOM is fully ready
-        setTimeout(showTutorialModal, 300);
+    if (!tutorialShown) {
+        // Show tutorial after a short delay to ensure everything is loaded
+        setTimeout(() => {
+            showTutorialModal();
+            localStorage.setItem("tutorialShown", "true");
+        }, 1000);
     }
   };
 
@@ -1052,9 +1056,10 @@ function currentSlide(n) {
 
 function showTutorialModal() {
     const modal = document.getElementById("tutorialModal");
-    modal.classList.remove("hidden"); // Remove hidden class
-    modal.classList.add("show"); // Add show class
+    modal.classList.remove("hidden");
+    modal.classList.add("show");
     document.body.style.overflow = "hidden";
+    slideIndex = 1; // Reset to first slide
     showSlides(slideIndex);
 }
 
@@ -1063,8 +1068,6 @@ function closeTutorial() {
     modal.classList.remove("show");
     localStorage.setItem("tutorialShown", "true");
     document.body.style.overflow = "auto";
-    slideIndex = 1;
-    showSlides(slideIndex);
     
     // Optional: Add hidden class back after animation
     setTimeout(() => {
@@ -1086,4 +1089,14 @@ document.addEventListener('DOMContentLoaded', function() {
       skipBtn.addEventListener('click', closeTutorial);
     }
     console.log("Sound initially set to:", soundEnabled);
+  });
+  
+// Show tutorial on first visit
+document.addEventListener('DOMContentLoaded', function() {
+    if (!localStorage.getItem('tutorialShown')) {
+      setTimeout(() => {
+        showTutorialModal();
+        localStorage.setItem('tutorialShown', 'true');
+      }, 1000);
+    }
   });
