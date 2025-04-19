@@ -963,16 +963,16 @@ function handleDifficultyChange(level) {
     console.log("Difficulty set to:", level);
 }
 
-let soundEnabled = false; 
+let soundEnabled = true; 
 
-// Sound effects
-const clickSound = new Audio('https://github.com/Sara-B03/NumberMatch/blob/main/frontend/assets/cellClick.mp3');
+// Sound effects - corrected URLs
+const clickSound = new Audio('./assets/cellClick.mp3');
 clickSound.volume = 0.02;
 
-const matchSound = new Audio('https://github.com/Sara-B03/NumberMatch/blob/main/frontend/assets/checkMatch.mp3');
+const matchSound = new Audio('./assets/checkMatch.mp3');
 matchSound.volume = 0.03;
 
-const winSound = new Audio('https://github.com/Sara-B03/NumberMatch/blob/main/frontend/assets/win.mp3');
+const winSound = new Audio('./assets/win.mp3');
 winSound.volume = 0.03;
 
 // Function to handle the sound toggle
@@ -1085,4 +1085,5 @@ document.addEventListener('DOMContentLoaded', function() {
     if (skipBtn) {
       skipBtn.addEventListener('click', closeTutorial);
     }
+    console.log("Sound initially set to:", soundEnabled);
   });
