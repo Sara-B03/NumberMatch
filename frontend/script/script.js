@@ -185,6 +185,11 @@ let secondCell = null;
 function cellClicked(cellID) {
     const cell = document.getElementById(cellID);
 
+    // Prevent clicking on empty cells
+    if (cell.innerText.trim() === "") {
+        return;
+    }
+
     if (soundEnabled) {
         clickSound.play();
     }
@@ -963,9 +968,9 @@ function handleDifficultyChange(level) {
     console.log("Difficulty set to:", level);
 }
 
-let soundEnabled = true; 
+let soundEnabled = true; // ✅ Default ON
 
-// Sound effects - corrected URLs
+// Sound effects
 const clickSound = new Audio('./assets/cellClick.mp3');
 clickSound.volume = 0.02;
 
@@ -980,8 +985,22 @@ function handleSoundToggle(isOn) {
     soundEnabled = isOn;
     localStorage.setItem("sound", isOn);
     console.log("Sound is", isOn ? "on" : "off");
-  }
-  
+}
+
+window.addEventListener("DOMContentLoaded", () => {
+    const storedSound = localStorage.getItem("sound");
+    const toggle = document.getElementById("soundToggle");
+
+    if (storedSound === null) {
+        soundEnabled = true;
+        toggle.checked = true;
+        localStorage.setItem("sound", "true");
+    } else {
+        soundEnabled = storedSound === "true";
+        toggle.checked = soundEnabled;
+    }
+});
+
 
 let isDarkMode = false;
 
@@ -1077,7 +1096,6 @@ function closeTutorial() {
 
 // Add event listeners for the buttons
 document.addEventListener('DOMContentLoaded', function() {
-    // Close button (✖)
     const closeBtn = document.querySelector('.tutorial-modal .close-btn');
     if (closeBtn) {
       closeBtn.addEventListener('click', closeTutorial);
