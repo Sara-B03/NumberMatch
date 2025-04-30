@@ -5,7 +5,7 @@ let loadLocation = "0-0";
 let copiesLeft = 5;
 let moveScore = 0;
 let intialNumbers = [];
-let difficulty1 = [[6, 5, 9, 3, 4, 5, 6, 3, 4, 7, 2, 5, 1, 2, 9, 8, 5, 1, 3, 1, 6, 7, 6, 7, 4, 7, 4, 5, 8, 5, 2, 9, 5, 2, 9],
+let difficulty2 = [[6, 5, 9, 3, 4, 5, 6, 3, 4, 7, 2, 5, 1, 2, 9, 8, 5, 1, 3, 1, 6, 7, 6, 7, 4, 7, 4, 5, 8, 5, 2, 9, 5, 2, 9],
 [7, 9, 4, 8, 5, 6, 1, 2, 5, 6, 5, 7, 1, 4, 8, 5, 8, 7, 1, 8, 6, 8, 5, 1, 3, 9, 3, 6, 5, 7, 1, 4, 8, 5, 8], 
 [3, 9, 6, 8, 6, 1, 7, 2, 3, 2, 4, 3, 1, 5, 2, 9, 6, 9, 5, 7, 5, 2, 6, 3, 5, 8, 3, 2, 1, 6, 7, 1, 2, 9, 4], 
 [2, 1, 3, 2, 1, 6, 1, 5, 4, 5, 7, 5, 4, 3, 5, 8, 7, 8, 1, 3, 9, 8, 1, 4, 2, 5, 6, 8, 7, 4, 3, 5, 3, 9, 7], 
@@ -44,12 +44,23 @@ let difficulty1 = [[6, 5, 9, 3, 4, 5, 6, 3, 4, 7, 2, 5, 1, 2, 9, 8, 5, 1, 3, 1, 
 [9, 5, 9, 7, 9, 6, 7, 6, 7, 2, 3, 4, 2, 5, 2, 2, 9, 5, 9, 5, 1, 7, 1, 7, 6, 8, 3, 7, 4, 2, 4, 2, 5, 9, 2],
 [9, 5, 7, 8, 9, 7, 1, 8, 5, 4, 2, 6, 5, 6, 3, 9, 6, 3, 7, 9, 7, 1, 2, 5, 2, 5, 9, 4, 5, 6, 5, 7, 9, 3, 4],
 [1, 3, 1, 2, 8, 9, 7, 8, 4, 5, 6, 8, 5, 5, 4, 5, 1, 5, 2, 3, 9, 2, 9, 2, 3, 6, 7, 4, 5, 4, 5, 6, 5, 9, 8]];
-
+let difficulty3 = [[2, 6, 2, 9, 6, 7, 8, 9, 3, 1, 5, 4, 7, 2, 9, 6, 5, 8, 6, 3, 2, 1, 4, 3, 8, 9, 4, 8, 1, 6, 3, 5, 9, 6, 7], 
+[8, 9, 4, 7, 1, 3, 8, 1, 8, 6, 3, 2, 5, 8, 6, 5, 6, 2, 1, 5, 4, 7, 9, 7, 2, 7, 1, 4, 7, 2, 5, 4, 5, 9, 6], 
+[4, 5, 1, 9, 5, 2, 6, 1, 6, 2, 3, 4, 7, 6, 3, 5, 7, 2, 1, 5, 9, 2, 9, 2, 9, 6, 1, 8, 3, 6, 3, 5, 6, 5, 3], 
+[4, 9, 7, 1, 4, 8, 6, 2, 9, 3, 2, 4, 2, 7, 5, 9, 3, 5, 4, 5, 9, 1, 6, 2, 6, 8, 1, 7, 2, 3, 5, 7, 1, 3, 5], 
+[4, 9, 6, 3, 8, 3, 1, 7, 2, 5, 8, 5, 9, 6, 5, 8, 4, 9, 4, 1, 7, 2, 3, 5, 7, 5, 2, 7, 2, 4, 5, 4, 8, 1, 6], 
+[6, 9, 8, 3, 6, 5, 7, 4, 7, 5, 3, 4, 9, 8, 9, 2, 5, 9, 2, 1, 5, 7, 6, 7, 4, 7, 2, 4, 6, 8, 1, 8, 5, 9, 5], 
+[9, 6, 9, 5, 4, 7, 4, 2, 1, 3, 5, 8, 3, 2, 5, 1, 7, 6, 2, 4, 9, 6, 9, 7, 6, 2, 5, 9, 6, 2, 3, 2, 5, 1, 7]];
 let hintsList = [];
 let hintsUsed = 0;
 const maxHints = 5;
 let currentHintIndex = 0;
 let currentHint = null; 
+
+// Function to generate random numbers
+function generateRandomNumbers(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
 
 // Function (Reusable) for loadLocation logic
 function parseAndUpdateLoadLocation() {
@@ -81,32 +92,59 @@ function newGameLoading() {
     currentHintIndex = 0;
     hintsUsed = 0;
 
-    // Randomly select one set of numbers from difficulty1
-    const randomIndex = Math.floor(Math.random() * difficulty1.length);
-    intialNumbers = difficulty1[randomIndex].slice(); 
-
     const table = document.getElementById("new-table");
     table.innerHTML = ""; 
-
-    // Recreate the table
     createTable("new-table");
 
     document.getElementById("copiesLeft").innerHTML = `<span class="material-symbols-rounded">content_copy</span> ${copiesLeft}`;
     document.getElementById("score").innerHTML = moveScore;
     document.getElementById("hintsLeft").innerText = `${maxHints}`;
 
-    // Populate the table with initial numbers from the chosen set
+    const difficulty = localStorage.getItem("difficulty") || "2";
+
+    if (difficulty === "1") {
+        intialNumbers = Array.from({ length: 36 }, () => generateRandomNumbers(1, 9));
+        console.log("Game started on EASY mode. Random numbers generated.");
+    } else if (difficulty === "2") {
+        const randomIndex = Math.floor(Math.random() * difficulty2.length);
+        intialNumbers = difficulty2[randomIndex].slice();
+        console.log(`Game started on NORMAL mode. Set: ${randomIndex}`);
+    } else if (difficulty === "3") {
+        const randomIndex = Math.floor(Math.random() * difficulty3.length);
+        intialNumbers = difficulty3[randomIndex].slice();
+        console.log(`Game started on HARD mode. Set: ${randomIndex}`);
+    }
+    
+    // ✅ Shared board population logic for all difficulties
     for (let i = 0; i < intialNumbers.length; i++) {
         const { currentRow, currentCol, newLoadLocation } = parseAndUpdateLoadLocation(loadLocation);
-        document.getElementById(loadLocation).innerHTML = intialNumbers[i];
+        document.getElementById(loadLocation).innerText = intialNumbers[i];
         loadLocation = newLoadLocation;
     }
+    
 
     const card = document.getElementById("resultCard");
     card.classList.add("hidden");
+}
 
-    console.log(`New game started with set ${randomIndex}. LoadLocation now: ${loadLocation}`);
+// Difficulty slider setup
+const difficultyLabels = {
+    "1": "Easy",
+    "2": "Normal",
+    "3": "Hard"
+};
 
+const difficultySlider = document.getElementById("difficultySlider");
+
+if (difficultySlider) {
+    const savedDifficulty = localStorage.getItem("difficulty") || "2";
+    difficultySlider.value = savedDifficulty;
+
+    difficultySlider.addEventListener("change", function () {
+        const selectedValue = this.value;
+        localStorage.setItem("difficulty", selectedValue);
+        newGameLoading(); // Restart the game with new difficulty
+    });
 }
 
 // Function to fetch leaderboard data and update the table
@@ -1118,3 +1156,4 @@ document.addEventListener('DOMContentLoaded', function() {
       }, 1000);
     }
   });
+
