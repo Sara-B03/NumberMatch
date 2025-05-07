@@ -92,6 +92,7 @@ function newGameLoading() {
     currentHintIndex = 0;
     hintsUsed = 0;
 
+    // Display a dynamic grid/table 
     const table = document.getElementById("new-table");
     table.innerHTML = ""; 
     createTable("new-table");
@@ -103,7 +104,7 @@ function newGameLoading() {
     const difficulty = localStorage.getItem("difficulty") || "2";
 
     if (difficulty === "1") {
-        intialNumbers = Array.from({ length: 36 }, () => generateRandomNumbers(1, 9));
+        intialNumbers = Array.from({ length: 35 }, () => generateRandomNumbers(1, 9));
         console.log("Game started on EASY mode. Random numbers generated.");
     } else if (difficulty === "2") {
         const randomIndex = Math.floor(Math.random() * difficulty2.length);
@@ -115,7 +116,7 @@ function newGameLoading() {
         console.log(`Game started on HARD mode. Set: ${randomIndex}`);
     }
     
-    // ✅ Shared board population logic for all difficulties
+    // Shared board population logic for all difficulties
     for (let i = 0; i < intialNumbers.length; i++) {
         const { currentRow, currentCol, newLoadLocation } = parseAndUpdateLoadLocation(loadLocation);
         document.getElementById(loadLocation).innerText = intialNumbers[i];
@@ -265,15 +266,18 @@ function cellClicked(cellID) {
 function createTable(tableID) {
     let tableRef = document.getElementById(tableID);
   
+    // 128 is the maximum number of po
     for (let row = 0; row < 128; row++) {
       let newRow = tableRef.insertRow(-1);
   
       if (row >= 5) {
+        //easy to hide and show rows
         newRow.classList.add("hidden-row");
       }
   
       for (let col = 8; col >= 0; col--) {
         let newCell = newRow.insertCell(0);
+        //why we chose to do a dynamic table (for the index 0-0)
         newCell.setAttribute('id', row + "-" + col);
         newCell.setAttribute('onclick', "cellClicked(this.id)");
         let newText = document.createTextNode("");
@@ -1006,7 +1010,7 @@ function handleDifficultyChange(level) {
     console.log("Difficulty set to:", level);
 }
 
-let soundEnabled = true; // ✅ Default ON
+let soundEnabled = true; // Default ON
 
 // Sound effects
 const clickSound = new Audio('./assets/cellClick.mp3');
