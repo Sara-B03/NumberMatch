@@ -97,10 +97,12 @@ function newGameLoading() {
     table.innerHTML = ""; 
     createTable("new-table");
 
+    // For HTML front
     document.getElementById("copiesLeft").innerHTML = `<span class="material-symbols-rounded">content_copy</span> ${copiesLeft}`;
     document.getElementById("score").innerHTML = moveScore;
     document.getElementById("hintsLeft").innerText = `${maxHints}`;
 
+    // Auto is on normal difficulty
     const difficulty = localStorage.getItem("difficulty") || "2";
 
     if (difficulty === "1") {
@@ -577,7 +579,7 @@ function copyNumbers() {
     } else {
       window.alert("No more copies left");
     }
-  }  
+}  
   
 // Function to check if selected cells are in the same Column
 function isNumbersSameColumn(cellOne, cellTwo) {
@@ -1084,7 +1086,7 @@ window.onload = () => {
             localStorage.setItem("tutorialShown", "true");
         }, 1000);
     }
-  };
+};
 
 
 function showSlides(n) {
@@ -1149,7 +1151,7 @@ document.addEventListener('DOMContentLoaded', function() {
       skipBtn.addEventListener('click', closeTutorial);
     }
     console.log("Sound initially set to:", soundEnabled);
-  });
+});
   
 // Show tutorial on first visit
 document.addEventListener('DOMContentLoaded', function() {
@@ -1159,5 +1161,5 @@ document.addEventListener('DOMContentLoaded', function() {
         localStorage.setItem('tutorialShown', 'true');
       }, 1000);
     }
-  });
+});
 
